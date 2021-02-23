@@ -1,0 +1,65 @@
+<plugin
+    id="codeGeneration"
+    description="VP Plugin to peforme Code Generation from models"
+    provider="hamza"
+    class="code.plugin.vp.MainCodeGeneration">
+    <actionSets>
+        
+        <actionSet id="PDMActionSet">
+
+            <action
+                id="PDMAction"
+                actionType="generalAction"
+                label="Platform Description Model"
+                tooltip="PDM"
+                menuPath="Plugins/#"
+                icon="icons/pdm.png"
+                toolbarPath="Plugins/#">
+                <actionController class="code.plugin.vp.Controls.PDMControl"/>
+            </action>
+
+            <action
+                id="CodeAction"
+                actionType="generalAction"
+                label="Code Generartion"
+                tooltip="Code Generartion"
+                menuPath="Plugins/#"
+                icon="icons/code.png"
+                toolbarPath="Plugins/#">
+                <actionController class="code.plugin.vp.Controls.CodeGenerationControl"/>
+            </action>
+        </actionSet>
+        
+        <contextSensitiveActionSet id="markingAction"> 
+            <!-- <contextTypes all="true"/> -->
+            <contextTypes all="false">
+                <include type="Package"/>
+                <include type="Class"/>
+                <include type="Interface"/>
+                <include type="Attribute"/>
+                <include type="Operation"/>
+                <include type="Parameter"/>
+                <include type="Association"/>
+                <include type="AssociationEnd"/>
+                <include type="Generalization"/>
+                <include type="Dependency"/>
+            </contextTypes>
+
+            <menu
+                id="mdeId"
+                label="MDE"
+                style="normal"
+                menuPath="/#">
+            </menu>
+            
+            <action
+                id="pimParameterizationId"
+                label="Parameterize"
+                style="normal"
+                menuPath="mdeId/#">
+				<actionController class="code.plugin.vp.Controls.PIMParameterizationControl"/>
+			</action>
+        </contextSensitiveActionSet>
+
+    </actionSets>
+</plugin>
