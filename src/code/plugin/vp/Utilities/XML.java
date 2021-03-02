@@ -17,7 +17,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import com.vp.plugin.ApplicationManager;
-
+import com.vp.plugin.ViewManager;
 import com.vp.plugin.model.IProject;
 
 import org.w3c.dom.Attr;
@@ -240,32 +240,51 @@ public class XML {
 
             }
             
+            
+            // //Create the save Path 
+            // IProject project = ApplicationManager.instance().getProjectManager().getProject();
+
+            // String saveFolder = project.getProjectFile().getParentFile().getAbsolutePath();
+            // saveFolder = saveFolder + "\\MDEPlugin";
+            // File saveFolderFile = new File(saveFolder); 
+
+            // if (!saveFolderFile.exists()) {
+            //     saveFolderFile.mkdir();
+            // }
  
-            //Create the save Path 
-            IProject project = ApplicationManager.instance().getProjectManager().getProject();
-
-            String saveFolder = project.getProjectFile().getParentFile().getAbsolutePath().replace("\\", "\\\\");
-            saveFolder = saveFolder + "\\MDEPlugin";
-            File saveFolderFile = new File(saveFolder); 
-
-            if (!saveFolderFile.exists()) {
-                saveFolderFile.mkdir();
+            //Create the MDE Tool save Path in Documents
+            String documentPath = System.getProperty("user.home") + "\\Documents";
+            documentPath = documentPath + "\\MDETool";
+            File mdeToolFile = new File(documentPath); 
+            if (!mdeToolFile.exists()) {
+                mdeToolFile.mkdir();
             }
- 
+
+            //Create the project folder
+            IProject project = ApplicationManager.instance().getProjectManager().getProject();
+            String projectPath = documentPath +"\\"+ project.getName();
+            File projectFile = new File(projectPath); 
+            if (!projectFile.exists()) {
+                projectFile.mkdir();
+            }
+
+            
+
+
             // create the xml file
             //transform the DOM Object to an XML File
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource domSource = new DOMSource(document);
-            StreamResult streamResult = new StreamResult(new File(saveFolderFile +"\\UQARMDE_PDMs.xml"));
-            
+            // StreamResult streamResult = new StreamResult(new File(saveFolder +"\\UQARMDE_PDMs.xml"));
+            // transformer.transform(domSource, streamResult);
+
+
+           
+            //Docuemnts save xml file
+            StreamResult streamResultDoc = new StreamResult(new File(projectFile +"\\UQARMDE_PDMs.xml"));
+            transformer.transform(domSource, streamResultDoc);
  
-            // If you use
-            // StreamResult result = new StreamResult(System.out);
-            // the output will be pushed to the standard output ...
-            // You can use that for debugging 
- 
-            transformer.transform(domSource, streamResult);
  
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
@@ -561,30 +580,33 @@ public class XML {
 
             }
             
-            
-
-            //Create the save Path 
-            IProject project = ApplicationManager.instance().getProjectManager().getProject();
-
-            String projectName = project.getProjectFile().getName();
-            String saveFolder = project.getProjectFile().getParentFile().getAbsolutePath().replace("\\", "\\\\");
-            saveFolder = saveFolder + "\\MDEPlugin";
-            File saveFolderFile = new File(saveFolder); 
-
-            if (!saveFolderFile.exists()) {
-                saveFolderFile.mkdir();
+ 
+            //Create the MDE Tool save Path in Documents
+            String documentPath = System.getProperty("user.home") + "\\Documents";
+            documentPath = documentPath + "\\MDETool";
+            File mdeToolFile = new File(documentPath); 
+            if (!mdeToolFile.exists()) {
+                mdeToolFile.mkdir();
             }
-            
+
+            //Create the project folder
+            IProject project = ApplicationManager.instance().getProjectManager().getProject();
+            String projectPath = documentPath +"\\"+ project.getName();
+            File projectFile = new File(projectPath); 
+            if (!projectFile.exists()) {
+                projectFile.mkdir();
+            }
+
             // create the xml file
             //transform the DOM Object to an XML File
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource domSource = new DOMSource(document);
+           
+            StreamResult streamResultDoc = new StreamResult(new File(projectFile +"\\"+ project.getName() + "_PIMParametrization.xml"));
+            
+            transformer.transform(domSource, streamResultDoc);
 
-            StreamResult streamResult = new StreamResult(new File(saveFolderFile +"\\"+ projectName + "_PIMParametrization.xml"));
- 
-            transformer.transform(domSource, streamResult);
- 
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
         } catch (TransformerException tfe) {
@@ -598,17 +620,26 @@ public class XML {
 
         try{
             //Get the PIM Parameterization file Path 
+            // IProject project = ApplicationManager.instance().getProjectManager().getProject();
+
+            // String projectName = project.getProjectFile().getName();
+            // String saveFolder = project.getProjectFile().getParentFile().getAbsolutePath().replace("\\", "\\\\");
+            // saveFolder = saveFolder + "\\MDEPlugin";
+            // File saveFolderFile = new File(saveFolder); 
+
+            // if (!saveFolderFile.exists()) {
+            //     saveFolderFile.mkdir();
+            // }
+            
+
+            // String xmlFile = saveFolderFile +"\\"+ projectName + "_PIMParametrization.xml";
             IProject project = ApplicationManager.instance().getProjectManager().getProject();
 
-            String projectName = project.getProjectFile().getName();
-            String saveFolder = project.getProjectFile().getParentFile().getAbsolutePath().replace("\\", "\\\\");
-            saveFolder = saveFolder + "\\MDEPlugin";
-            File saveFolderFile = new File(saveFolder); 
+            String projectName = project.getName();
 
-            if (!saveFolderFile.exists()) {
-                saveFolderFile.mkdir();
-            }
-            
+            String saveFolder = System.getProperty("user.home") + "\\Documents\\MDETool\\"+projectName;
+
+            File saveFolderFile = new File(saveFolder); 
 
             String xmlFile = saveFolderFile +"\\"+ projectName + "_PIMParametrization.xml";
 
@@ -646,6 +677,8 @@ public class XML {
             return designConcerns;
 
         } catch (Exception e) {
+            ViewManager viewManager = ApplicationManager.instance().getViewManager();
+            viewManager.showMessage(e.getMessage(), "Id");
             e.printStackTrace();
             return null;
         }
@@ -657,19 +690,15 @@ public class XML {
         try{
 
            //Get the PIM Parameterization file Path 
-           IProject project = ApplicationManager.instance().getProjectManager().getProject();
+            IProject project = ApplicationManager.instance().getProjectManager().getProject();
 
-           String projectName = project.getProjectFile().getName();
-           String saveFolder = project.getProjectFile().getParentFile().getAbsolutePath().replace("\\", "\\\\");
-           saveFolder = saveFolder + "\\MDEPlugin";
-           File saveFolderFile = new File(saveFolder); 
+            String projectName = project.getName();
 
-           if (!saveFolderFile.exists()) {
-               saveFolderFile.mkdir();
-           }
-           
+            String saveFolder = System.getProperty("user.home") + "\\Documents\\MDETool\\"+projectName;
 
-           String xmlFile = saveFolderFile +"\\"+ projectName + "_PIMParametrization.xml";
+            File saveFolderFile = new File(saveFolder); 
+
+            String xmlFile = saveFolderFile +"\\"+ projectName + "_PIMParametrization.xml";
 
            File file = new File(xmlFile);
 
@@ -722,6 +751,8 @@ public class XML {
             return markedUmlElements;
 
         } catch (Exception e) {
+            ViewManager viewManager = ApplicationManager.instance().getViewManager();
+            viewManager.showMessage(e.getMessage(), "Id");
             e.printStackTrace();
             return null;
         }
