@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingWorker;
 
+
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 
@@ -32,23 +33,32 @@ public class CodeGenerationControl implements VPActionController {
 
     @Override
     public void performAction(VPAction arg0) {
-        // get the pdm xml path
-        String pdmXMlPath = UserInterfaceUtil.getFilePath("Extensible Markup Language", "XML",null, "Choose the platform descritpion models");
+        //
+        String savingPath = createSavingFolder();
+        
+        int reply = JOptionPane.showConfirmDialog(null, 
+        "Before generating the code you need to: \n  1) Create the transformation templates\n  2) Export the parameterized PIM as XML\nThen move all the files to the following folder: \n" + savingPath+"\n\nAlready done ?? ", 
+        "Generating code", 
+        JOptionPane.YES_NO_OPTION);
 
-        if (pdmXMlPath != null) {
-            String savingPath = createSavingFolder();
-            
-            exportPIMasXML();
+        if (reply == JOptionPane.YES_OPTION) {
+            // get the pdm xml path
+            String pdmXMlPath = UserInterfaceUtil.getFilePath("Extensible Markup Language", "XML",null, "Choose the platform descritpion models");
 
-            // Select Main PDM
-            PDM selectedPdm = getMainPdm(XML.ImportPDMs(pdmXMlPath));
+            if (pdmXMlPath != null) {
+                
+                exportPIMasXML();
 
-            // Create PDM transformations templates command
-            String ttCommand = createTransformationCommand(selectedPdm, savingPath);
+                // Select Main PDM
+                PDM selectedPdm = getMainPdm(XML.ImportPDMs(pdmXMlPath));
 
-            // Run transformation template command line
-            runTransformationCommand(ttCommand, savingPath);
-		}
+                // Create PDM transformations templates command
+                String ttCommand = createTransformationCommand(selectedPdm, savingPath);
+
+                // Run transformation template command line
+                runTransformationCommand(ttCommand, savingPath);
+            }
+        } 
     }
 
     @Override
@@ -58,17 +68,14 @@ public class CodeGenerationControl implements VPActionController {
     }
 
     private String createSavingFolder(){
-        //Create the save Path 
+        //Create the MDE Tool save Path in Documents
         IProject project = ApplicationManager.instance().getProjectManager().getProject();
 
-        String saveFolder = project.getProjectFile().getParentFile().getAbsolutePath().replace("\\", "\\\\");
-        saveFolder = saveFolder + "\\\\MDEPlugin\\\\Code";
-        File saveFolderFile = new File(saveFolder); 
+        String documentPath = System.getProperty("user.home") + "\\Documents";
+        documentPath = documentPath + "\\MDETool\\"+project.getName()+"\\Generated code";
+        UserInterfaceUtil.createFolder(documentPath);
 
-        if (!saveFolderFile.exists()) {
-            saveFolderFile.mkdir();
-        }
-        return saveFolder;
+        return documentPath;
     }
     
     private PDM getMainPdm(List<PDM> pdms){
