@@ -45,4 +45,11 @@ public class UserInterfaceUtil {
 		}
         return null;
     }
+
+    public static void createFolder(String path){
+        File projectFile = new File(path); 
+        if (!projectFile.exists()) {
+            projectFile.mkdir();
+        }
+    }
 }

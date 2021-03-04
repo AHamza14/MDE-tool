@@ -73,10 +73,7 @@ public class CodeGenerationControl implements VPActionController {
 
         String documentPath = System.getProperty("user.home") + "\\Documents";
         documentPath = documentPath + "\\MDETool\\"+project.getName()+"\\Generated code";
-        File mdeToolFile = new File(documentPath); 
-        if (!mdeToolFile.exists()) {
-            mdeToolFile.mkdir();
-        }
+        UserInterfaceUtil.createFolder(documentPath);
 
         return documentPath;
     }
