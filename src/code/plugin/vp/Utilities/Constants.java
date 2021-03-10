@@ -3,8 +3,6 @@ package code.plugin.vp.Utilities;
 
 public class Constants {
 
-    //public static String SaxonicaTransformPath = "\"C:\\Program Files\\Saxonica\\SaxonHE9.9N\\bin\\Transform\"";
-    
     public static String TableColumns[] = new String[] {"Id", "Name"};
 
     public static String DesignConcernMarkingTableColumns[] = new String[] {"Id" ,"Design Concern", "Type", "Value"};

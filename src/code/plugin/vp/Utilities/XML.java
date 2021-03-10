@@ -267,7 +267,7 @@ public class XML {
             pce.printStackTrace();
         } catch (TransformerException tfe) {
             ViewManager viewManager = ApplicationManager.instance().getViewManager();
-            viewManager.showMessage(tfe.getMessage(), "Id");
+            viewManager.showMessage(tfe.getMessage(), "Exception");
             tfe.printStackTrace();
         }
     }
@@ -639,7 +639,7 @@ public class XML {
 
         } catch (Exception e) {
             ViewManager viewManager = ApplicationManager.instance().getViewManager();
-            viewManager.showMessage(e.getMessage(), "Id");
+            viewManager.showMessage(e.getMessage(), "Exception");
             e.printStackTrace();
             return null;
         }
@@ -713,7 +713,7 @@ public class XML {
 
         } catch (Exception e) {
             ViewManager viewManager = ApplicationManager.instance().getViewManager();
-            viewManager.showMessage(e.getMessage(), "Id");
+            viewManager.showMessage(e.getMessage(), "Exception");
             e.printStackTrace();
             return null;
         }

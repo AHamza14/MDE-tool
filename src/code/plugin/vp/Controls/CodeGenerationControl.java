@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingWorker;
 
-
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 
@@ -23,11 +22,14 @@ import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPActionController;
 import com.vp.plugin.model.IProject;
 
+import code.plugin.vp.GlobalConfig;
 import code.plugin.vp.Handlers.PIMParameterizationHandlers.ChoosePDMHandler;
 import code.plugin.vp.Structures.PDM;
 import code.plugin.vp.Structures.TransformationTemplate;
 import code.plugin.vp.Utilities.UserInterfaceUtil;
 import code.plugin.vp.Utilities.XML;
+
+
 
 public class CodeGenerationControl implements VPActionController {
 
@@ -37,7 +39,7 @@ public class CodeGenerationControl implements VPActionController {
         String savingPath = createSavingFolder();
         
         int reply = JOptionPane.showConfirmDialog(null, 
-        "Before generating the code you need to: \n  1) Create the transformation templates\n  2) Export the parameterized PIM as XML\nThen move all the files to the following folder: \n" + savingPath+"\n\nAlready done ?? ", 
+        "Before generating the code you need to: \n\n  1) Create the transformation templates.\n  2) Export the parameterized PIM as XML.\n\nThen move all the files to the following folder: \n" + savingPath+"\n\nAlready done ?? ", 
         "Generating code", 
         JOptionPane.YES_NO_OPTION);
 
@@ -70,9 +72,11 @@ public class CodeGenerationControl implements VPActionController {
     private String createSavingFolder(){
         //Create the MDE Tool save Path in Documents
         IProject project = ApplicationManager.instance().getProjectManager().getProject();
-
-        String documentPath = System.getProperty("user.home") + "\\Documents";
-        documentPath = documentPath + "\\MDETool\\"+project.getName()+"\\Generated code";
+        String documentPath = System.getProperty("user.home") + "\\Documents"+ "\\MDETool\\";
+        UserInterfaceUtil.createFolder(documentPath);
+        documentPath = documentPath +project.getName();
+        UserInterfaceUtil.createFolder(documentPath);
+        documentPath = documentPath +"\\Generated code";
         UserInterfaceUtil.createFolder(documentPath);
 
         return documentPath;
@@ -90,7 +94,7 @@ public class CodeGenerationControl implements VPActionController {
         //example: "C:\Program Files\Saxonica\SaxonHE9.9N\bin\Transform" -t C:\...\project.xml C:\...\FeuilleCoreEnum.xsl
 
         String command = "cd \""+path+"\" ";
-        String SaxonicaTransformPath = "\""+UserInterfaceUtil.getFilePath("Executable", "exe","C:\\Program Files\\Saxonica", "Choose Saxonica file path")+"\"";
+        String SaxonicaTransformPath = "\""+UserInterfaceUtil.getFilePath("Executable", "exe", GlobalConfig.getSaxonicaPath(), "Choose Saxonica file path")+"\"";
 
         for (TransformationTemplate tt : pdm.getPdmTransformationTemplate()) {
             File ttFile = new File(tt.getFileUri().replace("\\", "\\\\"));
