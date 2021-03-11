@@ -37,7 +37,7 @@ import code.plugin.vp.Structures.PIMParameterization.MarkedUmlElement;
 import code.plugin.vp.Structures.PIMParameterization.VPProject;
 
 public class XML {
-
+    static ViewManager viewManager = ApplicationManager.instance().getViewManager();
     public static void ExportPDMs(List<PDM> pdms){
         try {
  
@@ -264,9 +264,9 @@ public class XML {
  
  
         } catch (ParserConfigurationException pce) {
+            viewManager.showMessage(pce.getMessage(), "Exception");
             pce.printStackTrace();
         } catch (TransformerException tfe) {
-            ViewManager viewManager = ApplicationManager.instance().getViewManager();
             viewManager.showMessage(tfe.getMessage(), "Exception");
             tfe.printStackTrace();
         }
@@ -458,6 +458,7 @@ public class XML {
             return PDMs;
 
         } catch (Exception e) {
+            viewManager.showMessage(e.getMessage(), "Exception");
             e.printStackTrace();
         }
         return null;
@@ -580,9 +581,11 @@ public class XML {
             
             transformer.transform(domSource, streamResultDoc);
 
-        } catch (ParserConfigurationException pce) {
+        } catch (ParserConfigurationException pce) {            
+            viewManager.showMessage(pce.getMessage(), "Exception");
             pce.printStackTrace();
         } catch (TransformerException tfe) {
+            viewManager.showMessage(tfe.getMessage(), "Exception");
             tfe.printStackTrace();
         }
     }
@@ -638,7 +641,6 @@ public class XML {
             return designConcerns;
 
         } catch (Exception e) {
-            ViewManager viewManager = ApplicationManager.instance().getViewManager();
             viewManager.showMessage(e.getMessage(), "Exception");
             e.printStackTrace();
             return null;
@@ -712,7 +714,6 @@ public class XML {
             return markedUmlElements;
 
         } catch (Exception e) {
-            ViewManager viewManager = ApplicationManager.instance().getViewManager();
             viewManager.showMessage(e.getMessage(), "Exception");
             e.printStackTrace();
             return null;
