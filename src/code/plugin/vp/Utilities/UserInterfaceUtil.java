@@ -5,6 +5,7 @@ import java.awt.*;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.event.ActionEvent;
@@ -51,5 +52,10 @@ public class UserInterfaceUtil {
         if (!projectFile.exists()) {
             projectFile.mkdir();
         }
+    }
+
+    public static void initializeComponents(){
+        UIManager.put("OptionPane.yesButtonText", "Yes");
+        UIManager.put("OptionPane.noButtonText", "No");
     }
 }
