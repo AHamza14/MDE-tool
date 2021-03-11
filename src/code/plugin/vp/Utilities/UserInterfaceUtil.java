@@ -47,7 +47,7 @@ public class UserInterfaceUtil {
     }
 
     public static void createFolder(String path){
-        File projectFile = new File(path); 
+        File projectFile = new File(path);         
         if (!projectFile.exists()) {
             projectFile.mkdir();
         }

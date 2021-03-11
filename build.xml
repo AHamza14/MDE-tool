@@ -1,6 +1,6 @@
 <project name="Code Generation" default="build">
     <description>
-        ANT build script for VP Code Generation Plugin
+        ANT build script for VP MDE Plugin
     </description>
 
     <property name="src" location="src"/>
