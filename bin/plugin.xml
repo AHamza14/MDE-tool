@@ -4,31 +4,35 @@
     provider="hamza"
     class="code.plugin.vp.MainCodeGeneration">
     <actionSets>
-        
-        <actionSet id="PDMActionSet">
-
-            <action
+        <actionSet id="MDEActionSet">
+			<menu
+				id="MDEmenu"
+				label="MDE"
+				ribbonPath="Help"
+			/>
+			
+			<action
                 id="PDMAction"
                 actionType="generalAction"
                 label="Platform Description Model"
                 tooltip="PDM"
-                menuPath="Plugins/#"
+                style="normal"
                 icon="icons/pdm.png"
-                toolbarPath="Plugins/#">
-                <actionController class="code.plugin.vp.Controls.PDMControl"/>
-            </action>
+                ribbonPath="MDEmenu/#">
+				<actionController class="code.plugin.vp.Controls.PDMControl"/>
+			</action>
 
-            <action
+			<action
                 id="CodeAction"
                 actionType="generalAction"
                 label="Code Generartion"
                 tooltip="Code Generartion"
-                menuPath="Plugins/#"
+                style="normal"
                 icon="icons/code.png"
-                toolbarPath="Plugins/#">
-                <actionController class="code.plugin.vp.Controls.CodeGenerationControl"/>
-            </action>
-        </actionSet>
+                ribbonPath="MDEmenu/PDMAction">
+				<actionController class="code.plugin.vp.Controls.CodeGenerationControl"/>
+			</action>
+		</actionSet>
         
         <contextSensitiveActionSet id="markingAction"> 
             <!-- <contextTypes all="true"/> -->
@@ -51,6 +55,11 @@
                 style="normal"
                 menuPath="/#">
             </menu>
+            
+            <separator 
+                id="MDEseparator"
+                menuPath="/mdeId"
+            />
             
             <action
                 id="pimParameterizationId"
