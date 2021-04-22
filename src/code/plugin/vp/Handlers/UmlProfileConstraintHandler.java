@@ -194,7 +194,7 @@ public class UmlProfileConstraintHandler implements IDialogHandler {
 
         //Cancel Button
         CancelButton.addActionListener(e -> {
-            int result = JOptionPane.showConfirmDialog(null, "Are sure you want to cancel?","Cancel", JOptionPane.YES_NO_OPTION);
+            int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to cancel?","Cancel", JOptionPane.YES_NO_OPTION);
 
             if (result == JOptionPane.YES_OPTION) {
                 UserInterfaceUtil.CloseDialog(e);
