@@ -109,8 +109,6 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
 
         gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 2, 2, 10, 0, 0.50, 8);
         mainPane.add(mainControls, gbc);
-        // gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 2, 2, 10, 30, 0.25, 4);
-        // mainPane.add(SaveButton, gbc);
 
         return mainPane;
     }

@@ -274,16 +274,6 @@ public class PDMDetailsHandler implements IDialogHandler {
 
         mainGbc = UserInterfaceUtil.setGridBagConstraints(mainGbc, 0, 4, 2, 10, 0, 0.50, 8);
         mainPane.add(mainControls, mainGbc);
-        // mainGbc = UserInterfaceUtil.setGridBagConstraints(mainGbc, 1, 4, 2, 10, 10, 0.5, 3);
-        // mainPane.add(MainSaveButton, mainGbc);
-
-        // //Main Panel : Cancel 
-        // mainGbc = UserInterfaceUtil.setGridBagConstraints(mainGbc, 4, 4, 2, 10, 10, 0.5, 3);
-        // mainPane.add(MainCancelButton, mainGbc);
-
-        // //Main Panel : Close 
-        // mainGbc = UserInterfaceUtil.setGridBagConstraints(mainGbc, 7, 4, 2, 10, 10, 0.5, 3);
-        // mainPane.add(MainCloseButton, mainGbc);
         
         return mainPane;
     }

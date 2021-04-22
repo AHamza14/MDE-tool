@@ -1,6 +1,6 @@
 <plugin
     id="codeGeneration"
-    description="VP Plugin to peforme Code Generation from models"
+    description="VP Plugin to peforme MDE code generation"
     provider="hamza"
     class="code.plugin.vp.MainCodeGeneration">
     <actionSets>

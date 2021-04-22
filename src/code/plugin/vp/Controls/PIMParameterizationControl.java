@@ -16,10 +16,6 @@ import code.plugin.vp.Utilities.UserInterfaceUtil;
 public class PIMParameterizationControl implements VPContextActionController {
 
 	private String PdmXMlPath;
-	//private List<MarkedUmlElement> markedUmlElement = null;
-
-	//To check if we already marked some uml elements
-	boolean isMarked = false;
 	
 	@Override
 	public void performAction(VPAction arg0, VPContext arg1, ActionEvent arg2) {
@@ -27,12 +23,9 @@ public class PIMParameterizationControl implements VPContextActionController {
 		PdmXMlPath = UserInterfaceUtil.getFilePath("Extensible Markup Language", "XML", null,"Choose the platform descritpion models");
 
 		if(PdmXMlPath != null){
-
-				ViewManager vm =  ApplicationManager.instance().getViewManager();
-				PIMParameterizationHandler d = new PIMParameterizationHandler(PdmXMlPath);
-				vm.showDialog(d);
-			//}
-			
+			ViewManager vm =  ApplicationManager.instance().getViewManager();
+			PIMParameterizationHandler d = new PIMParameterizationHandler(PdmXMlPath);
+			vm.showDialog(d);
 		}
 		  	    	    
 	}

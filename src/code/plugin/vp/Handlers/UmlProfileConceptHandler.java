@@ -155,19 +155,7 @@ public class UmlProfileConceptHandler implements IDialogHandler {
 
         gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 5, 2, 10, 0, 0.50, 8);
         mainPane.add(mainControls, gbc);
-        //Save Button
-        // gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 5, 2, 10, 30, 0.50, 2);
-        // mainPane.add(SaveButton, gbc);
-
-        // //Cancel Button
-        // gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 3, 5, 2, 10, 30, 0.50, 2);
-        // mainPane.add(CancelButton, gbc);
-
-        // //Close Button
-        // gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 6, 5, 2, 10, 30, 0.50, 2);
-        // mainPane.add(CloseButton, gbc);
         
-        //mainPane.setPreferredSize(new Dimension(300, 300));
         return mainPane;
     }
 

@@ -13,8 +13,7 @@ import java.io.File;
 
 public class UserInterfaceUtil {
 
-    public static GridBagConstraints setGridBagConstraints(GridBagConstraints paraGbc, int gridx, int gridy, int fill,
-            int ipady, int ipadx, double weightx, int gridwidth) {
+    public static GridBagConstraints setGridBagConstraints(GridBagConstraints paraGbc, int gridx, int gridy, int fill, int ipady, int ipadx, double weightx, int gridwidth) {
         paraGbc.ipady = ipady;
         paraGbc.ipadx = ipadx;
         paraGbc.gridwidth = gridwidth;
