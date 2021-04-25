@@ -186,8 +186,6 @@ public class TransformationTemplateHandler implements IDialogHandler {
 
         gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 7, 2, 10, 0, 0.50, 8);
         mainPane.add(mainControls, gbc);
-        // gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 7, 2, 10, 30, 0.75, 8);
-        // mainPane.add(SaveButton, gbc);
 
         return mainPane;
     }
@@ -235,7 +233,7 @@ public class TransformationTemplateHandler implements IDialogHandler {
 
         //Cancel Button
         CancelButton.addActionListener(e -> {
-            int result = JOptionPane.showConfirmDialog(null, "Are sure you want to cancel?","Cancel", JOptionPane.YES_NO_OPTION);
+            int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to cancel?","Cancel", JOptionPane.YES_NO_OPTION);
 
             if (result == JOptionPane.YES_OPTION) {
                 UserInterfaceUtil.CloseDialog(e);

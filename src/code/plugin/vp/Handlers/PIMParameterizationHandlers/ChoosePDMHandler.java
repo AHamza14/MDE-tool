@@ -2,16 +2,12 @@ package code.plugin.vp.Handlers.PIMParameterizationHandlers;
 
 import java.awt.Component;
 import java.util.ArrayList;
-//import java.util.ArrayList;
 import java.util.List;
 import java.awt.*;
 import javax.swing.*;
 
 import com.vp.plugin.view.*;
-
-//import code.plugin.vp.Structures.Concept;
 import code.plugin.vp.Structures.PDM;
-//import code.plugin.vp.Utilities.Constants;
 import code.plugin.vp.Utilities.UserInterfaceUtil;
 
 public class ChoosePDMHandler implements IDialogHandler {
@@ -30,7 +26,6 @@ public class ChoosePDMHandler implements IDialogHandler {
 
         titleLabel = new JLabel(title, SwingConstants.CENTER);
         PdmsList.setSelectionMode(selectionMode);
-        //if(mult)
         DefaultListModel<String> pdmsModel = new DefaultListModel<String>();
         for(PDM pdm : Pdms){
             pdmsModel.addElement(pdm.getName());
@@ -55,11 +50,6 @@ public class ChoosePDMHandler implements IDialogHandler {
         JScrollPane tableScroll = new JScrollPane(PdmsList);
         tableScroll.setPreferredSize(new Dimension(100, 100));
         mainPane.add(tableScroll, gbc);
-    //     gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 1, 2, 10, 30, 0.25, 4);
-    //     PdmTable.getColumnModel().getColumn(0).setMaxWidth(150);
-    //     JScrollPane DDtableScroll = new JScrollPane(PdmTable);
-    //    // DDtableScroll.setPreferredSize(new Dimension(300, 100));
-    //     mainPane.add(DDtableScroll, gbc);
 
         //Save Button
         JPanel mainControls = new JPanel();
@@ -76,8 +66,6 @@ public class ChoosePDMHandler implements IDialogHandler {
 
         gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 2, 2, 10, 0, 0.50, 8);
         mainPane.add(mainControls, gbc);
-        // gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 2, 2, 10, 30, 0.25, 4);
-        // mainPane.add(SaveButton, gbc);
 
         return mainPane;
     }
@@ -104,7 +92,7 @@ public class ChoosePDMHandler implements IDialogHandler {
 
          //Cancel Button
          CancelButton.addActionListener(e -> {
-            int result = JOptionPane.showConfirmDialog(null, "Are sure you want to cancel?","Cancel", JOptionPane.YES_NO_OPTION);
+            int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to cancel?","Cancel", JOptionPane.YES_NO_OPTION);
 
             if (result == JOptionPane.YES_OPTION) {
                 UserInterfaceUtil.CloseDialog(e);
@@ -115,15 +103,6 @@ public class ChoosePDMHandler implements IDialogHandler {
         CloseButton.addActionListener(e -> {
             UserInterfaceUtil.CloseDialog(e);
         });
-        // DefaultTableModel model = (DefaultTableModel) PdmTable.getModel();
-        // String pdmName = (String) model.getValueAt(PdmTable.getSelectedRow(), 0);
-        // for (PDM pdm : Pdms) {
-        //     if(pdm.getName().equals(pdmName)){
-        //         Pdm = pdm;
-        //         JOptionPane.showMessageDialog(null, "PDM saved: "+Pdm.getName());
-        //         UserInterfaceUtil.CloseDialog(e);
-        //     }
-        // }
         
     }
 

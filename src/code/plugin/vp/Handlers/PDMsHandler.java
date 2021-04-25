@@ -201,7 +201,7 @@ public class PDMsHandler extends JFrame implements IDialogHandler {
         CancelButton.addActionListener(e -> {
             // Locale us = Locale.forLanguageTag("en-US");
             // JOptionPane.setDefaultLocale(us);
-            int result = JOptionPane.showConfirmDialog( this, "Are sure you want to cancel?","Cancel", JOptionPane.YES_NO_OPTION);
+            int result = JOptionPane.showConfirmDialog( this, "Are you sure you want to cancel?","Cancel", JOptionPane.YES_NO_OPTION);
 
             if (result == JOptionPane.YES_OPTION) {
                 this.dispose();

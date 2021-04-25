@@ -163,7 +163,6 @@ public class CodeGenerationControl implements VPActionController {
                         e.printStackTrace();
                     }
                 }
-                //JOptionPane.showMessageDialog(null, "Generating the code is done.");
             }
         };
         worker.execute();
