@@ -15,7 +15,9 @@ import java.awt.event.MouseEvent;
 import com.vp.plugin.ApplicationManager;
 import com.vp.plugin.ViewManager;
 import com.vp.plugin.diagram.IDiagramElement;
+import com.vp.plugin.diagram.connector.IAssociationUIModel;
 import com.vp.plugin.diagram.shape.IClassUIModel;
+import com.vp.plugin.diagram.shape.IPackageUIModel;
 import com.vp.plugin.model.*;
 import com.vp.plugin.model.factory.IModelElementFactory;
 import com.vp.plugin.view.*;
@@ -130,7 +132,9 @@ public class PIMParameterizationHandler implements IDialogHandler {
             public void actionPerformed(ActionEvent e) {
 
                 IProject project = ApplicationManager.instance().getProjectManager().getProject();
+            
                 
+
                 VPProject markedProject = new VPProject(project.getId(), project.getName(),
                         new SimpleDateFormat("dd-MM-yyyy").format(new Date()), ParameterizedUmlElements);
 
@@ -147,6 +151,7 @@ public class PIMParameterizationHandler implements IDialogHandler {
                     }
                 }
 
+                
                 XML.ExportParameterizedPIM(xmlMarkedProjects);
                 
                 // Apply the design concerns to the PIM
@@ -310,23 +315,31 @@ public class PIMParameterizationHandler implements IDialogHandler {
         List<String> yesStereo = new ArrayList<String>();
         yesStereo.add("yes");
         yesStereo.add("Yes");
-
+        
         Map<IModelElement, MarkedUmlElement> markedUmlElements = getMarkedDiagramElements(project);
+
 
         for (Map.Entry<IModelElement, MarkedUmlElement> element : markedUmlElements.entrySet()) {
             IModelElement modelElement = element.getKey();
             MarkedUmlElement markedUmlElement = element.getValue();
 
             ITaggedValueContainer taggedValuesContainer = IModelElementFactory.instance().createTaggedValueContainer();
+            
 
+           
+           
             if (!markedUmlElement.getDesignConcerns().isEmpty()) {
                 for (DesignConcernMarking designConcern : markedUmlElement.getDesignConcerns()) {
-                    if (designConcern.getDesignConcern().getType().equals("Stereotype") && yesStereo.contains(designConcern.getValue())
-                            && !modelElement.hasStereotype(designConcern.getDesignConcern().getName())) {
+                    
+                    if (designConcern.getDesignConcern().getType().equals("Stereotype") 
+                        && yesStereo.contains(designConcern.getValue())
+                        && !modelElement.hasStereotype(designConcern.getDesignConcern().getName())) 
+                    {
                         modelElement.addStereotype(createStereoType(designConcern, modelElement));
                     }
 
                     if (designConcern.getDesignConcern().getType().equals("Tagged Value")) {
+                        
                         ITaggedValueContainer existingTVContainer = modelElement.getTaggedValues();
                         // if there is no one => create the first one
                         if (existingTVContainer == null) {
@@ -334,7 +347,6 @@ public class PIMParameterizationHandler implements IDialogHandler {
                             modelElement.setTaggedValues(taggedValuesContainer);
                         }
                         else {
-
                             // Look if the tagged value already exist and update value
                             ITaggedValue[] existingTaggedValues = existingTVContainer.toTaggedValueArray();
 
@@ -372,16 +384,33 @@ public class PIMParameterizationHandler implements IDialogHandler {
             for (IDiagramElement diagramElement : diagramUmlElements) {
                 IModelElement modelElement = diagramElement.getModelElement();
 
-                if (modelElement.getId() == markedumlElement.getId()) {
-                    markeDiagramElements.put(modelElement, markedumlElement);
+                if (modelElement.getId().equals(markedumlElement.getId())) {
+                    if(diagramElement instanceof IClassUIModel){
+                        IClassUIModel classShape = (IClassUIModel) diagramElement;
+                        IModelElement classModel = classShape.getModelElement();
+                        markeDiagramElements.put(classModel, markedumlElement);
+                    }
+
+                    if(diagramElement instanceof IPackageUIModel){
+                        IPackageUIModel packageShape = (IPackageUIModel) diagramElement;
+                        IModelElement packageModel = packageShape.getModelElement();
+                        markeDiagramElements.put(packageModel, markedumlElement);
+                    }
+
+                    if(diagramElement instanceof IAssociationUIModel){
+                        IAssociationUIModel associationShape = (IAssociationUIModel) diagramElement;
+                        IModelElement associationModel = associationShape.getModelElement();
+                        markeDiagramElements.put(associationModel, markedumlElement);
+                    }
+                    
                 }
             }
         }
 
         // For the class childrens (Attribute, Operation, Parameter and AssociationEnd)
-        for (IDiagramElement DiagramElement : diagramUmlElements) {
-            if (DiagramElement instanceof IClassUIModel) {
-                IClassUIModel classShape = (IClassUIModel) DiagramElement;
+        for (IDiagramElement diagramElement : diagramUmlElements) {
+            if (diagramElement instanceof IClassUIModel) {
+                IClassUIModel classShape = (IClassUIModel) diagramElement;
                 IClass classModel = (IClass) classShape.getModelElement();
 
                 for (IModelElement classChild : classModel.toChildArray()) {
