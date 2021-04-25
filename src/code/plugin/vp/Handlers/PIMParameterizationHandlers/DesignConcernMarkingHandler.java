@@ -24,13 +24,23 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
     
     private List<DesignConcernMarking> DesignConcerns;
 
-    JTable DesignConcernsTable = new JTable(new DefaultTableModel(Constants.DesignConcernMarkingTableColumns, 0));
+    JTable StereotypesTable = new JTable(new DefaultTableModel(Constants.DesignConcernMarkingTableColumns, 0));
     PDM Pdm;
+
     JButton SaveButton = new JButton("Save");
     JButton CancelButton = new JButton("Cancel");
     JButton CloseButton = new JButton("Close");
 
     public DesignConcernMarkingHandler(PDM pdm, String umlElementId, String umlElementType,  List<DesignConcernMarking> alreadyMarkedDCs){
+
+        //Create column with predefined values "yes" or "no" for steretypes.
+        TableColumn valueColumn = StereotypesTable.getColumnModel().getColumn(2);
+        JComboBox<String> comboBox = new JComboBox<>();
+        
+        comboBox.addItem("Yes");
+        comboBox.addItem("No");
+        valueColumn.setCellEditor(new DefaultCellEditor(comboBox));
+        //end
 
         if(alreadyMarkedDCs == null){
             DesignConcerns = new ArrayList<DesignConcernMarking>();
@@ -54,25 +64,16 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
                             DesignConcernMarking alreadyDesignConcern = DesignConcerns.stream().filter(ue -> designConcern.getId().equals(ue.getDesignConcern().getId())).findFirst().orElse(null);
                             designConcernValue = alreadyDesignConcern == null? null: alreadyDesignConcern.getValue();
                         }
-                        DefaultTableModel model = (DefaultTableModel) DesignConcernsTable.getModel();
-                        
+
                         if(designConcern.getType().equals("Stereotype")){
-                            TableColumn valueColumn = DesignConcernsTable.getColumnModel().getColumn(3);
-                            JComboBox<String> comboBox = new JComboBox<>();
-                            
-                            //For tagged values make there default values: for example if tagged value is boolean it must be "true" or "false"
-                            comboBox.addItem("Yes");
-                            comboBox.addItem("No");
-                            valueColumn.setCellEditor(new DefaultCellEditor(comboBox));
+                            DefaultTableModel model = (DefaultTableModel) StereotypesTable.getModel();
+                            model.addRow(new Object[]{designConcern.getId(), designConcern.getName(), designConcernValue==null?"":designConcernValue});
                         }
                         
-                        model.addRow(new Object[]{designConcern.getId(), designConcern.getName(), designConcern.getType(), designConcernValue==null?"":designConcernValue});
                     }
             }
         }
     }
-
-    
 
     @Override
     public Component getComponent() {
@@ -88,9 +89,9 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
 
         //Design Concern Table
         gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 1, 2, 10, 30, 0.25, 4);
-        DesignConcernsTable.getColumnModel().getColumn(0).setWidth(80);
-        DesignConcernsTable.getColumnModel().getColumn(1).setWidth(150);
-        JScrollPane designConcernsScroll = new JScrollPane(DesignConcernsTable);
+        StereotypesTable.getColumnModel().getColumn(0).setWidth(50);
+        StereotypesTable.getColumnModel().getColumn(1).setWidth(200);
+        JScrollPane designConcernsScroll = new JScrollPane(StereotypesTable);
         designConcernsScroll.setPreferredSize(new Dimension(300, 150));
         mainPane.add(designConcernsScroll, gbc);
 
@@ -127,17 +128,17 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
         SaveButton.addActionListener((ActionListener) new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                if(DesignConcernsTable.getModel().getRowCount() > 0){
-                    DefaultTableModel model = (DefaultTableModel) DesignConcernsTable.getModel();
+                if(StereotypesTable.getModel().getRowCount() > 0){
+                    DefaultTableModel model = (DefaultTableModel) StereotypesTable.getModel();
                     if(DesignConcerns.isEmpty()){
                         for (int i=0; i < model.getRowCount(); i++) {
                             //if(model.getValueAt(i, 3).toString() != ""){
                                 for (Concept concept : Pdm.getPdmUmlProfile().getConcepts()) {
                                     for (DesignConcern dd : concept.getDesignConcerns()) {
-                                        if(model.getValueAt(i, 3).toString() != ""){
+                                        if(model.getValueAt(i, 2).toString() != ""){
                                             if(dd.getId().equals(UUID.fromString(model.getValueAt(i, 0).toString()))){
                                             
-                                                DesignConcerns.add(new DesignConcernMarking(dd, model.getValueAt(i, 3).toString(), Pdm.getName()));
+                                                DesignConcerns.add(new DesignConcernMarking(dd, model.getValueAt(i, 2).toString(), Pdm.getName()));
                                             }
                                         }
                                     }
@@ -150,7 +151,7 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
                         for (DesignConcernMarking dd : DesignConcerns) {
                             for (int i=0; i < model.getRowCount(); i++) {
                                 if(model.getValueAt(i, 0).toString().equals(dd.getDesignConcern().getId().toString())){
-                                    dd.setValue(model.getValueAt(i, 3).toString());
+                                    dd.setValue(model.getValueAt(i, 2).toString());
                                     //break;
                                 }
                             }   
