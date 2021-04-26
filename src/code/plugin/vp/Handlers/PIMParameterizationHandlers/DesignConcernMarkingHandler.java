@@ -95,20 +95,28 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
         gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 0, 2, 10, 30, 0.25, 4);
         mainPane.add(new JLabel("Marking Design Concerns", SwingConstants.CENTER), gbc);
 
-        //Design Concern (Stereotypes) Table
+        //Title stereotypes
         gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 1, 2, 10, 30, 0.25, 4);
+        mainPane.add(new JLabel("Stereotypes:", SwingConstants.LEFT), gbc);
+
+        //Design Concern (Stereotypes) Table
+        gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 2, 2, 10, 30, 0.25, 4);
         StereotypesTable.getColumnModel().getColumn(0).setWidth(50);
         StereotypesTable.getColumnModel().getColumn(1).setWidth(200);
         JScrollPane stereotypesScroll = new JScrollPane(StereotypesTable);
-        stereotypesScroll.setPreferredSize(new Dimension(300, 150));
+        stereotypesScroll.setPreferredSize(new Dimension(250, 100));
         mainPane.add(stereotypesScroll, gbc);
 
+        //Title tagged values
+        gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 3, 2, 10, 30, 0.25, 4);
+        mainPane.add(new JLabel("Tagged values:", SwingConstants.LEFT), gbc);
+
         //Design Concern (Tagged values) Table
-        gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 2, 2, 10, 30, 0.25, 4);
+        gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 4, 2, 10, 30, 0.25, 4);
         TaggedValuesTable.getColumnModel().getColumn(0).setWidth(50);
         TaggedValuesTable.getColumnModel().getColumn(1).setWidth(200);
         JScrollPane taggedValuesScroll = new JScrollPane(TaggedValuesTable);
-        taggedValuesScroll.setPreferredSize(new Dimension(300, 150));
+        taggedValuesScroll.setPreferredSize(new Dimension(250, 100));
         mainPane.add(taggedValuesScroll, gbc);
 
         //Save Button
@@ -124,7 +132,7 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
         CloseButton.setPreferredSize(new Dimension(125, 30));
         mainControls.add(CloseButton);
 
-        gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 3, 2, 10, 0, 0.50, 8);
+        gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 5, 2, 10, 0, 0.50, 8);
         mainPane.add(mainControls, gbc);
 
         return mainPane;
