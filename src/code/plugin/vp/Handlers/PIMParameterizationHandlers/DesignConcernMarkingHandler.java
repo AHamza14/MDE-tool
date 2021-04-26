@@ -25,6 +25,9 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
     private List<DesignConcernMarking> DesignConcerns;
 
     JTable StereotypesTable = new JTable(new DefaultTableModel(Constants.DesignConcernMarkingTableColumns, 0));
+
+    JTable TaggedValuesTable = new JTable(new DefaultTableModel(Constants.DesignConcernMarkingTableColumns, 0));
+
     PDM Pdm;
 
     JButton SaveButton = new JButton("Save");
@@ -69,6 +72,11 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
                             DefaultTableModel model = (DefaultTableModel) StereotypesTable.getModel();
                             model.addRow(new Object[]{designConcern.getId(), designConcern.getName(), designConcernValue==null?"":designConcernValue});
                         }
+
+                        else if(designConcern.getType().equals("Tagged Value")){
+                            DefaultTableModel model = (DefaultTableModel) TaggedValuesTable.getModel();
+                            model.addRow(new Object[]{designConcern.getId(), designConcern.getName(), designConcernValue==null?"":designConcernValue});
+                        }
                         
                     }
             }
@@ -87,13 +95,21 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
         gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 0, 2, 10, 30, 0.25, 4);
         mainPane.add(new JLabel("Marking Design Concerns", SwingConstants.CENTER), gbc);
 
-        //Design Concern Table
+        //Design Concern (Stereotypes) Table
         gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 1, 2, 10, 30, 0.25, 4);
         StereotypesTable.getColumnModel().getColumn(0).setWidth(50);
         StereotypesTable.getColumnModel().getColumn(1).setWidth(200);
-        JScrollPane designConcernsScroll = new JScrollPane(StereotypesTable);
-        designConcernsScroll.setPreferredSize(new Dimension(300, 150));
-        mainPane.add(designConcernsScroll, gbc);
+        JScrollPane stereotypesScroll = new JScrollPane(StereotypesTable);
+        stereotypesScroll.setPreferredSize(new Dimension(300, 150));
+        mainPane.add(stereotypesScroll, gbc);
+
+        //Design Concern (Tagged values) Table
+        gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 2, 2, 10, 30, 0.25, 4);
+        TaggedValuesTable.getColumnModel().getColumn(0).setWidth(50);
+        TaggedValuesTable.getColumnModel().getColumn(1).setWidth(200);
+        JScrollPane taggedValuesScroll = new JScrollPane(TaggedValuesTable);
+        taggedValuesScroll.setPreferredSize(new Dimension(300, 150));
+        mainPane.add(taggedValuesScroll, gbc);
 
         //Save Button
         JPanel mainControls = new JPanel();
@@ -108,7 +124,7 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
         CloseButton.setPreferredSize(new Dimension(125, 30));
         mainControls.add(CloseButton);
 
-        gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 2, 2, 10, 0, 0.50, 8);
+        gbc = UserInterfaceUtil.setGridBagConstraints(gbc, 0, 3, 2, 10, 0, 0.50, 8);
         mainPane.add(mainControls, gbc);
 
         return mainPane;
@@ -127,41 +143,18 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
         // Save Button
         SaveButton.addActionListener((ActionListener) new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                DefaultTableModel stereotypesModel = (DefaultTableModel) StereotypesTable.getModel();
+                DefaultTableModel taggedValuesModel = (DefaultTableModel) TaggedValuesTable.getModel();
 
-                if(StereotypesTable.getModel().getRowCount() > 0){
-                    DefaultTableModel model = (DefaultTableModel) StereotypesTable.getModel();
-                    if(DesignConcerns.isEmpty()){
-                        for (int i=0; i < model.getRowCount(); i++) {
-                            //if(model.getValueAt(i, 3).toString() != ""){
-                                for (Concept concept : Pdm.getPdmUmlProfile().getConcepts()) {
-                                    for (DesignConcern dd : concept.getDesignConcerns()) {
-                                        if(model.getValueAt(i, 2).toString() != ""){
-                                            if(dd.getId().equals(UUID.fromString(model.getValueAt(i, 0).toString()))){
-                                            
-                                                DesignConcerns.add(new DesignConcernMarking(dd, model.getValueAt(i, 2).toString(), Pdm.getName()));
-                                            }
-                                        }
-                                    }
-                                }
-                            
-                            //}
-                        }
-                    }
-                    else{
-                        for (DesignConcernMarking dd : DesignConcerns) {
-                            for (int i=0; i < model.getRowCount(); i++) {
-                                if(model.getValueAt(i, 0).toString().equals(dd.getDesignConcern().getId().toString())){
-                                    dd.setValue(model.getValueAt(i, 2).toString());
-                                    //break;
-                                }
-                            }   
-                        }
-                    }
+                if(stereotypesModel.getRowCount() > 0 || taggedValuesModel.getRowCount() > 0){
+                    saveDesignConcernTable(stereotypesModel);
+                    saveDesignConcernTable(taggedValuesModel);
+
                     JOptionPane.showMessageDialog(null, "Saved");
                     UserInterfaceUtil.CloseDialog(e);
                 }
                 else{
-                    JOptionPane.showMessageDialog(null, "The Design Concerns Table is empty");
+                    JOptionPane.showMessageDialog(null, "The Design Concerns Tables are empty");
                 }
             }
         });
@@ -185,6 +178,36 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
     @Override
     public boolean canClosed() {
         return true;
+    }
+
+    private void saveDesignConcernTable(DefaultTableModel designConcernModel){
+        if(DesignConcerns.isEmpty()){
+            for (int i=0; i < designConcernModel.getRowCount(); i++) {
+                //if(model.getValueAt(i, 3).toString() != ""){
+                    for (Concept concept : Pdm.getPdmUmlProfile().getConcepts()) {
+                        for (DesignConcern dd : concept.getDesignConcerns()) {
+                            if(designConcernModel.getValueAt(i, 2).toString() != "" 
+                            && dd.getId().equals(UUID.fromString(designConcernModel.getValueAt(i, 0).toString()))){
+                                
+                                DesignConcerns.add(new DesignConcernMarking(dd, designConcernModel.getValueAt(i, 2).toString(), Pdm.getName()));
+                            }
+                        }
+                    }
+                
+                //}
+            }
+        }
+        else{
+            for (DesignConcernMarking dd : DesignConcerns) {
+                for (int i=0; i < designConcernModel.getRowCount(); i++) {
+                    if(designConcernModel.getValueAt(i, 0).toString().equals(dd.getDesignConcern().getId().toString())){
+                        dd.setValue(designConcernModel.getValueAt(i, 2).toString());
+                        //break;
+                    }
+                }   
+            }
+        }
+        
     }
 
     public List<DesignConcernMarking> getDesignConcernsMarking(){
