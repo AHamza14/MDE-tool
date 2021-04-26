@@ -5,7 +5,7 @@ public class Constants {
 
     public static String TableColumns[] = new String[] {"Id", "Name"};
 
-    public static String DesignConcernMarkingTableColumns[] = new String[] {"Id" ,"Design Concern", "Type", "Value"};
+    public static String DesignConcernMarkingTableColumns[] = new String[] {"Id" ,"Design Concern", "Value"};
 
     public static String PdmColumn[] = new String[] {"PDM"};
 
