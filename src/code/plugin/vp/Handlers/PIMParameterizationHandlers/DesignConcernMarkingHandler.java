@@ -181,33 +181,27 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
     }
 
     private void saveDesignConcernTable(DefaultTableModel designConcernModel){
-        if(DesignConcerns.isEmpty()){
-            for (int i=0; i < designConcernModel.getRowCount(); i++) {
-                //if(model.getValueAt(i, 3).toString() != ""){
-                    for (Concept concept : Pdm.getPdmUmlProfile().getConcepts()) {
-                        for (DesignConcern dd : concept.getDesignConcerns()) {
-                            if(designConcernModel.getValueAt(i, 2).toString() != "" 
-                            && dd.getId().equals(UUID.fromString(designConcernModel.getValueAt(i, 0).toString()))){
-                                
-                                DesignConcerns.add(new DesignConcernMarking(dd, designConcernModel.getValueAt(i, 2).toString(), Pdm.getName()));
-                            }
+
+        for (int i=0; i < designConcernModel.getRowCount(); i++) {
+
+            String ddId = designConcernModel.getValueAt(i, 0).toString();
+            DesignConcernMarking existedDesicnConcernMarking = DesignConcerns.stream().filter(dd -> UUID.fromString(ddId).equals(dd.getDesignConcern().getId())).findFirst().orElse(null);
+
+            if(existedDesicnConcernMarking == null){
+                for (Concept concept : Pdm.getPdmUmlProfile().getConcepts()) {
+                    for (DesignConcern dd : concept.getDesignConcerns()) {
+                        if(designConcernModel.getValueAt(i, 2).toString() != "" 
+                        && dd.getId().equals(UUID.fromString(ddId))){
+                            
+                            DesignConcerns.add(new DesignConcernMarking(dd, designConcernModel.getValueAt(i, 2).toString(), Pdm.getName()));
                         }
                     }
-                
-                //}
+                }
             }
-        }
-        else{
-            for (DesignConcernMarking dd : DesignConcerns) {
-                for (int i=0; i < designConcernModel.getRowCount(); i++) {
-                    if(designConcernModel.getValueAt(i, 0).toString().equals(dd.getDesignConcern().getId().toString())){
-                        dd.setValue(designConcernModel.getValueAt(i, 2).toString());
-                        //break;
-                    }
-                }   
+            else{
+                existedDesicnConcernMarking.setValue(designConcernModel.getValueAt(i, 2).toString());
             }
-        }
-        
+        } 
     }
 
     public List<DesignConcernMarking> getDesignConcernsMarking(){
