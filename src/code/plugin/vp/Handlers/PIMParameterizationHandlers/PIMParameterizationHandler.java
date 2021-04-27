@@ -312,9 +312,6 @@ public class PIMParameterizationHandler implements IDialogHandler {
 
     // Apply the Stereotypes and Tagged Values
     public void PIMModelParameterization(VPProject project) {
-        List<String> yesStereo = new ArrayList<String>();
-        yesStereo.add("yes");
-        yesStereo.add("Yes");
         
         Map<IModelElement, MarkedUmlElement> markedUmlElements = getMarkedDiagramElements(project);
 
@@ -325,17 +322,18 @@ public class PIMParameterizationHandler implements IDialogHandler {
 
             ITaggedValueContainer taggedValuesContainer = IModelElementFactory.instance().createTaggedValueContainer();
             
-
-           
-           
             if (!markedUmlElement.getDesignConcerns().isEmpty()) {
                 for (DesignConcernMarking designConcern : markedUmlElement.getDesignConcerns()) {
                     
                     if (designConcern.getDesignConcern().getType().equals("Stereotype") 
-                        && yesStereo.contains(designConcern.getValue())
+                        && designConcern.getValue() == "Yes"
                         && !modelElement.hasStereotype(designConcern.getDesignConcern().getName())) 
                     {
                         modelElement.addStereotype(createStereoType(designConcern, modelElement));
+                    }
+
+                    if(designConcern.getValue() == "No"){
+                        modelElement.removeStereotype(designConcern.getDesignConcern().getName());
                     }
 
                     if (designConcern.getDesignConcern().getType().equals("Tagged Value")) {
