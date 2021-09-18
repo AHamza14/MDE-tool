@@ -18,7 +18,6 @@ public class ElementDefinition {
         this.Description = parDescription;
     }
 
-    //Id
     public UUID getId() {
         return Id;
     }
@@ -27,7 +26,6 @@ public class ElementDefinition {
         this.Id = paraId;
     }
 
-    //Name
     public String getName() {
         return Name;
     }
@@ -36,7 +34,6 @@ public class ElementDefinition {
         this.Name = paraName;
     }
 
-    //Type
     public String getType() {
         return Type;
     }
@@ -45,7 +42,6 @@ public class ElementDefinition {
         this.Type = paraType;
     }
 
-    //Description
     public String getDescription() {
         return Description;
     }

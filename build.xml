@@ -5,7 +5,7 @@
 
     <property name="src" location="src"/>
     <property name="build" location="bin"/>
-    <property name="openapi" location="C:/Program Files/Visual Paradigm 16.1/lib/openapi.jar"/>
+    <property name="openapi" location="C:/Program Files/Visual Paradigm 16.3/lib/openapi.jar"/>
     <property name="vp" location="C:/Users/hamza/AppData/Roaming/VisualParadigm/plugins" />
 
     <target name="build">

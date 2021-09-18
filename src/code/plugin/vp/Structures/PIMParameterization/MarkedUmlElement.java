@@ -8,13 +8,13 @@ public class MarkedUmlElement {
     private String FullQualifiedName;
     private String Name;
     private String Type;
-    private List<DesignConcernMarking> DesignConcerns;
+    private List<MarkedDesignConcern> DesignConcerns;
     //private String RelationDirection;//Needed to make diffrence between Relationships with same name 
     //private String ParentClass; //Needed to make diffrence between classes sub childs (attribute,..) 
 
     public MarkedUmlElement() {}
 
-    public MarkedUmlElement(String parId, String parFullQualifiedName, String parName, String parType, List<DesignConcernMarking> parDesignConcerns){
+    public MarkedUmlElement(String parId, String parFullQualifiedName, String parName, String parType, List<MarkedDesignConcern> parDesignConcerns){
         this.Id = parId;
         this.FullQualifiedName = parFullQualifiedName;
         this.Name = parName;
@@ -59,11 +59,11 @@ public class MarkedUmlElement {
     }
 
     //Description
-    public List<DesignConcernMarking> getDesignConcerns() {
+    public List<MarkedDesignConcern> getDesignConcerns() {
         return DesignConcerns;
     }
 
-    public void setDesignConcerns(List<DesignConcernMarking> paraDesignConcerns) {
+    public void setDesignConcerns(List<MarkedDesignConcern> paraDesignConcerns) {
         this.DesignConcerns = paraDesignConcerns;
     }
 

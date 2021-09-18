@@ -15,14 +15,14 @@ import javax.swing.table.TableColumn;
 import com.vp.plugin.view.*;
 
 import code.plugin.vp.Structures.*;
-import code.plugin.vp.Structures.PIMParameterization.DesignConcernMarking;
+import code.plugin.vp.Structures.PIMParameterization.MarkedDesignConcern;
 import code.plugin.vp.Utilities.Constants;
 import code.plugin.vp.Utilities.UserInterfaceUtil;
 import code.plugin.vp.Utilities.XML;
 
-public class DesignConcernMarkingHandler implements IDialogHandler {
+public class MarkingDesignConcernHandler implements IDialogHandler {
     
-    private List<DesignConcernMarking> DesignConcerns;
+    private List<MarkedDesignConcern> DesignConcerns;
 
     JTable StereotypesTable = new JTable(new DefaultTableModel(Constants.DesignConcernMarkingTableColumns, 0));
 
@@ -34,7 +34,7 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
     JButton CancelButton = new JButton("Cancel");
     JButton CloseButton = new JButton("Close");
 
-    public DesignConcernMarkingHandler(PDM pdm, String umlElementId, String umlElementType,  List<DesignConcernMarking> alreadyMarkedDCs){
+    public MarkingDesignConcernHandler(PDM pdm, String umlElementId, String umlElementType,  List<MarkedDesignConcern> alreadyMarkedDCs){
 
         //Create column with predefined values "yes" or "no" for steretypes.
         TableColumn valueColumn = StereotypesTable.getColumnModel().getColumn(2);
@@ -46,7 +46,7 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
         //end
 
         if(alreadyMarkedDCs == null){
-            DesignConcerns = new ArrayList<DesignConcernMarking>();
+            DesignConcerns = new ArrayList<MarkedDesignConcern>();
         }
         else{
             DesignConcerns = alreadyMarkedDCs;
@@ -64,7 +64,7 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
                             designConcernValue = markedDesignConcerns.get(designConcern.getId().toString());
                         }
                         if(!DesignConcerns.isEmpty()){
-                            DesignConcernMarking alreadyDesignConcern = DesignConcerns.stream().filter(ue -> designConcern.getId().equals(ue.getDesignConcern().getId())).findFirst().orElse(null);
+                            MarkedDesignConcern alreadyDesignConcern = DesignConcerns.stream().filter(ue -> designConcern.getId().equals(ue.getDesignConcern().getId())).findFirst().orElse(null);
                             designConcernValue = alreadyDesignConcern == null? null: alreadyDesignConcern.getValue();
                         }
 
@@ -193,7 +193,7 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
         for (int i=0; i < designConcernModel.getRowCount(); i++) {
 
             String ddId = designConcernModel.getValueAt(i, 0).toString();
-            DesignConcernMarking existedDesicnConcernMarking = DesignConcerns.stream().filter(dd -> UUID.fromString(ddId).equals(dd.getDesignConcern().getId())).findFirst().orElse(null);
+            MarkedDesignConcern existedDesicnConcernMarking = DesignConcerns.stream().filter(dd -> UUID.fromString(ddId).equals(dd.getDesignConcern().getId())).findFirst().orElse(null);
 
             if(existedDesicnConcernMarking == null){
                 for (Concept concept : Pdm.getPdmUmlProfile().getConcepts()) {
@@ -201,7 +201,7 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
                         if(designConcernModel.getValueAt(i, 2).toString() != "" 
                         && dd.getId().equals(UUID.fromString(ddId))){
                             
-                            DesignConcerns.add(new DesignConcernMarking(dd, designConcernModel.getValueAt(i, 2).toString(), Pdm.getName()));
+                            DesignConcerns.add(new MarkedDesignConcern(dd, designConcernModel.getValueAt(i, 2).toString(), Pdm.getName()));
                         }
                     }
                 }
@@ -212,7 +212,7 @@ public class DesignConcernMarkingHandler implements IDialogHandler {
         } 
     }
 
-    public List<DesignConcernMarking> getDesignConcernsMarking(){
+    public List<MarkedDesignConcern> getDesignConcernsMarking(){
         return DesignConcerns;
     }
 }

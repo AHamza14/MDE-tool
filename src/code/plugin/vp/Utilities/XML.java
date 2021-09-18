@@ -32,7 +32,7 @@ import code.plugin.vp.Structures.DesignConcern;
 import code.plugin.vp.Structures.PDM;
 import code.plugin.vp.Structures.TransformationTemplate;
 import code.plugin.vp.Structures.UmlProfile;
-import code.plugin.vp.Structures.PIMParameterization.DesignConcernMarking;
+import code.plugin.vp.Structures.PIMParameterization.MarkedDesignConcern;
 import code.plugin.vp.Structures.PIMParameterization.MarkedUmlElement;
 import code.plugin.vp.Structures.PIMParameterization.VPProject;
 
@@ -527,7 +527,7 @@ public class XML {
                     Element DesignConcernsElement = document.createElement("DesignConcerns");
                     umlElement.appendChild(DesignConcernsElement);
 
-                    for(DesignConcernMarking designConcern: markedUmlElement.getDesignConcerns()){
+                    for(MarkedDesignConcern designConcern: markedUmlElement.getDesignConcerns()){
                         //Design Concern Element
                         Element designConcernElement = document.createElement("DesignConcern");
                         DesignConcernsElement.appendChild(designConcernElement);
@@ -693,7 +693,7 @@ public class XML {
                     // UML element design concern
                     NodeList designConcernList = designConcernsElement.getElementsByTagName("DesignConcern");
 
-                    List<DesignConcernMarking> designConcerns = new ArrayList<DesignConcernMarking>();
+                    List<MarkedDesignConcern> designConcerns = new ArrayList<MarkedDesignConcern>();
                     for (int j = 0; j < designConcernList.getLength(); j++) {
                         Node designConcernNode = designConcernList.item(j);
 
@@ -705,7 +705,7 @@ public class XML {
                         String designConcernValue = designConcernElement.getElementsByTagName("Value").item(0).getTextContent();
                         String designConcernPdm = designConcernElement.getElementsByTagName("Pdm").item(0).getTextContent();
 
-                        designConcerns.add(new DesignConcernMarking(new DesignConcern(designConcernId, designConcernName, designConcernType, "", null), designConcernValue, designConcernPdm));
+                        designConcerns.add(new MarkedDesignConcern(new DesignConcern(designConcernId, designConcernName, designConcernType, "", null), designConcernValue, designConcernPdm));
                     }
                     markedUmlElements.add(new MarkedUmlElement(umlElementId, umlElementFullQualifiedName, umlElementFullQualifiedName, umlElementType, designConcerns));
                 }
