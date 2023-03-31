@@ -40,7 +40,7 @@ public class XML {
 
     static ViewManager viewManager = ApplicationManager.instance().getViewManager();
 
-    public static void ExportPDMs(List<PDM> pdms) {
+    public static void ExportPDM(PDM pdm) {
         try {
 
             DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
@@ -51,198 +51,195 @@ public class XML {
             Element root = document.createElement("PDMs");
             document.appendChild(root);
 
-            // Pdms
-            for (PDM pdm : pdms) {
-                // PDM element
-                Element pdmElement = document.createElement("PDM");
-                root.appendChild(pdmElement);
+            
+            // PDM element
+            Element pdmElement = document.createElement("PDM");
+            root.appendChild(pdmElement);
 
-                // PDM Id Attribute
-                Attr pdmIdAttr = document.createAttribute("Id");
-                pdmIdAttr.setValue(String.valueOf(pdm.getId()));
-                pdmElement.setAttributeNode(pdmIdAttr);
+            // PDM Id Attribute
+            Attr pdmIdAttr = document.createAttribute("Id");
+            pdmIdAttr.setValue(String.valueOf(pdm.getId()));
+            pdmElement.setAttributeNode(pdmIdAttr);
 
-                // PDM Name Element
-                Element pdmNameElement = document.createElement("Name");
-                pdmNameElement.appendChild(document.createTextNode(pdm.getName()));
-                pdmElement.appendChild(pdmNameElement);
+            // PDM Name Element
+            Element pdmNameElement = document.createElement("Name");
+            pdmNameElement.appendChild(document.createTextNode(pdm.getName()));
+            pdmElement.appendChild(pdmNameElement);
 
-                // PDM Description Element
-                Element pdmDescriptionElement = document.createElement("Description");
-                pdmDescriptionElement.appendChild(document.createTextNode(pdm.getDescription()));
-                pdmElement.appendChild(pdmDescriptionElement);
+            // PDM Description Element
+            Element pdmDescriptionElement = document.createElement("Description");
+            pdmDescriptionElement.appendChild(document.createTextNode(pdm.getDescription()));
+            pdmElement.appendChild(pdmDescriptionElement);
 
-                // PDM Date Attribute
-                Attr pdmDateAttr = document.createAttribute("CreatingDate");
-                pdmDateAttr.setValue(pdm.getCreatingDate());
-                pdmElement.setAttributeNode(pdmDateAttr);
+            // PDM Date Attribute
+            Attr pdmDateAttr = document.createAttribute("CreatingDate");
+            pdmDateAttr.setValue(pdm.getCreatingDate());
+            pdmElement.setAttributeNode(pdmDateAttr);
 
-                // PDM : Uml Profile Element
-                Element umlProfileElement = document.createElement("UMLProfile");
-                pdmElement.appendChild(umlProfileElement);
+            // PDM : Uml Profile Element
+            Element umlProfileElement = document.createElement("UMLProfile");
+            pdmElement.appendChild(umlProfileElement);
 
-                // PDM : Uml Profile : Cocnepts Element
-                Element conceptsElement = document.createElement("Concepts");
-                umlProfileElement.appendChild(conceptsElement);
+            // PDM : Uml Profile : Cocnepts Element
+            Element conceptsElement = document.createElement("Concepts");
+            umlProfileElement.appendChild(conceptsElement);
 
-                // PDM : Uml Profile : Cocnepts : Concept Element
-                for (Concept concept : pdm.getPdmUmlProfile().getConcepts()) {
-                    // Concept Element
-                    Element conceptElement = document.createElement("Concept");
-                    conceptsElement.appendChild(conceptElement);
+            // PDM : Uml Profile : Cocnepts : Concept Element
+            for (Concept concept : pdm.getPdmUmlProfile().getConcepts()) {
+                // Concept Element
+                Element conceptElement = document.createElement("Concept");
+                conceptsElement.appendChild(conceptElement);
 
-                    // Concept Id Attribute
-                    Attr conceptIdAttr = document.createAttribute("Id");
-                    conceptIdAttr.setValue(String.valueOf(concept.getId()));
-                    conceptElement.setAttributeNode(conceptIdAttr);
+                // Concept Id Attribute
+                Attr conceptIdAttr = document.createAttribute("Id");
+                conceptIdAttr.setValue(String.valueOf(concept.getId()));
+                conceptElement.setAttributeNode(conceptIdAttr);
 
-                    // Concept Name Element
-                    Element conceptName = document.createElement("Name");
-                    conceptName.appendChild(document.createTextNode(concept.getName()));
-                    conceptElement.appendChild(conceptName);
+                // Concept Name Element
+                Element conceptName = document.createElement("Name");
+                conceptName.appendChild(document.createTextNode(concept.getName()));
+                conceptElement.appendChild(conceptName);
 
-                    // Concept Type Element
-                    Element conceptType = document.createElement("Type");
-                    conceptType.appendChild(document.createTextNode(concept.getType()));
-                    conceptElement.appendChild(conceptType);
+                // Concept Type Element
+                Element conceptType = document.createElement("Type");
+                conceptType.appendChild(document.createTextNode(concept.getType()));
+                conceptElement.appendChild(conceptType);
 
-                    // Concept Description Element
-                    Element conceptDescription = document.createElement("Description");
-                    conceptDescription.appendChild(document.createTextNode(concept.getDescription()));
-                    conceptElement.appendChild(conceptDescription);
+                // Concept Description Element
+                Element conceptDescription = document.createElement("Description");
+                conceptDescription.appendChild(document.createTextNode(concept.getDescription()));
+                conceptElement.appendChild(conceptDescription);
 
-                    // Concept Design Concerns Element
-                    Element DesignConcernsElement = document.createElement("DesignConcerns");
-                    conceptElement.appendChild(DesignConcernsElement);
-                    for (DesignConcern designConcern : concept.getDesignConcerns()) {
-                        // Design Concern Element
-                        Element designConcernElement = document.createElement("DesignConcern");
-                        DesignConcernsElement.appendChild(designConcernElement);
+                // Concept Design Concerns Element
+                Element DesignConcernsElement = document.createElement("DesignConcerns");
+                conceptElement.appendChild(DesignConcernsElement);
+                for (DesignConcern designConcern : concept.getDesignConcerns()) {
+                    // Design Concern Element
+                    Element designConcernElement = document.createElement("DesignConcern");
+                    DesignConcernsElement.appendChild(designConcernElement);
 
-                        // Design Concern Id Attribute
-                        Attr ddIdAttr = document.createAttribute("Id");
-                        ddIdAttr.setValue(String.valueOf(designConcern.getId()));
-                        designConcernElement.setAttributeNode(ddIdAttr);
+                    // Design Concern Id Attribute
+                    Attr ddIdAttr = document.createAttribute("Id");
+                    ddIdAttr.setValue(String.valueOf(designConcern.getId()));
+                    designConcernElement.setAttributeNode(ddIdAttr);
 
-                        // Design Concern Name
-                        Element ddName = document.createElement("Name");
-                        ddName.appendChild(document.createTextNode(designConcern.getName()));
-                        designConcernElement.appendChild(ddName);
+                    // Design Concern Name
+                    Element ddName = document.createElement("Name");
+                    ddName.appendChild(document.createTextNode(designConcern.getName()));
+                    designConcernElement.appendChild(ddName);
 
-                        // Design Concern Type
-                        Element ddType = document.createElement("Type");
-                        ddType.appendChild(document.createTextNode(designConcern.getType()));
-                        designConcernElement.appendChild(ddType);
+                    // Design Concern Type
+                    Element ddType = document.createElement("Type");
+                    ddType.appendChild(document.createTextNode(designConcern.getType()));
+                    designConcernElement.appendChild(ddType);
 
-                        // Design Concern Description
-                        Element ddDescription = document.createElement("Description");
-                        ddDescription.appendChild(document.createTextNode(designConcern.getDescription()));
-                        designConcernElement.appendChild(ddDescription);
+                    // Design Concern Description
+                    Element ddDescription = document.createElement("Description");
+                    ddDescription.appendChild(document.createTextNode(designConcern.getDescription()));
+                    designConcernElement.appendChild(ddDescription);
 
-                        // Design Concern UML Element Types
-                        Element UmlElementTypes = document.createElement("UMLElementTypes");
-                        designConcernElement.appendChild(UmlElementTypes);
-                        for (String umlElemnt : designConcern.getUmlElements()) {
-                            // UML Element Type
-                            Element UmlElement = document.createElement("UMLElementType");
-                            UmlElement.appendChild(document.createTextNode(umlElemnt));
-                            UmlElementTypes.appendChild(UmlElement);
-                        }
-
+                    // Design Concern UML Element Types
+                    Element UmlElementTypes = document.createElement("UMLElementTypes");
+                    designConcernElement.appendChild(UmlElementTypes);
+                    for (String umlElemnt : designConcern.getUmlElements()) {
+                        // UML Element Type
+                        Element UmlElement = document.createElement("UMLElementType");
+                        UmlElement.appendChild(document.createTextNode(umlElemnt));
+                        UmlElementTypes.appendChild(UmlElement);
                     }
+
                 }
+            }
 
-                // PDM : Uml Profile : Constraints Element
-                Element constraintsElement = document.createElement("Constraints");
-                umlProfileElement.appendChild(constraintsElement);
-                for (Constraint constraint : pdm.getPdmUmlProfile().getConstraints()) {
-                    // Constraint Element
-                    Element constraintElement = document.createElement("Constraint");
-                    constraintsElement.appendChild(constraintElement);
+            // PDM : Uml Profile : Constraints Element
+            Element constraintsElement = document.createElement("Constraints");
+            umlProfileElement.appendChild(constraintsElement);
+            for (Constraint constraint : pdm.getPdmUmlProfile().getConstraints()) {
+                // Constraint Element
+                Element constraintElement = document.createElement("Constraint");
+                constraintsElement.appendChild(constraintElement);
 
-                    // Constraint Id Attribute
-                    Attr constraintIdAttr = document.createAttribute("Id");
-                    constraintIdAttr.setValue(String.valueOf(constraint.getId()));
-                    constraintElement.setAttributeNode(constraintIdAttr);
+                // Constraint Id Attribute
+                Attr constraintIdAttr = document.createAttribute("Id");
+                constraintIdAttr.setValue(String.valueOf(constraint.getId()));
+                constraintElement.setAttributeNode(constraintIdAttr);
 
-                    // Constraint Name Element
-                    Element constraintName = document.createElement("Name");
-                    constraintName.appendChild(document.createTextNode(constraint.getName()));
-                    constraintElement.appendChild(constraintName);
+                // Constraint Name Element
+                Element constraintName = document.createElement("Name");
+                constraintName.appendChild(document.createTextNode(constraint.getName()));
+                constraintElement.appendChild(constraintName);
 
-                    // Constraint Concept A Element
-                    Element constraintAConcept = document.createElement("ConceptA");
-                    constraintAConcept
-                            .appendChild(document.createTextNode(constraint.getConceptA().getId().toString()));
-                    constraintElement.appendChild(constraintAConcept);
+                // Constraint Concept A Element
+                Element constraintAConcept = document.createElement("ConceptA");
+                constraintAConcept
+                        .appendChild(document.createTextNode(constraint.getConceptA().getId().toString()));
+                constraintElement.appendChild(constraintAConcept);
 
-                    // Constraint Concept B Element
-                    Element constraintBConcept = document.createElement("ConceptB");
-                    constraintBConcept
-                            .appendChild(document.createTextNode(constraint.getConceptB().getId().toString()));
-                    constraintElement.appendChild(constraintBConcept);
+                // Constraint Concept B Element
+                Element constraintBConcept = document.createElement("ConceptB");
+                constraintBConcept
+                        .appendChild(document.createTextNode(constraint.getConceptB().getId().toString()));
+                constraintElement.appendChild(constraintBConcept);
 
-                    // Constraint Type Element
-                    Element constraintType = document.createElement("Type");
-                    constraintType.appendChild(document.createTextNode(constraint.getType()));
-                    constraintElement.appendChild(constraintType);
+                // Constraint Type Element
+                Element constraintType = document.createElement("Type");
+                constraintType.appendChild(document.createTextNode(constraint.getType()));
+                constraintElement.appendChild(constraintType);
 
-                    // Constraint Description Element
-                    Element constraintDescription = document.createElement("Description");
-                    constraintDescription.appendChild(document.createTextNode(constraint.getDescription()));
-                    constraintElement.appendChild(constraintDescription);
+                // Constraint Description Element
+                Element constraintDescription = document.createElement("Description");
+                constraintDescription.appendChild(document.createTextNode(constraint.getDescription()));
+                constraintElement.appendChild(constraintDescription);
+            }
+
+            // PDM : Transformation Template Element
+            Element TransformationTemplatesElement = document.createElement("TransformationTemplates");
+            pdmElement.appendChild(TransformationTemplatesElement);
+            for (TransformationTemplate tt : pdm.getPdmTransformationTemplate()) {
+                // Transformation Template Element
+                Element ttElement = document.createElement("TransformationTemplate");
+                TransformationTemplatesElement.appendChild(ttElement);
+
+                // Transformation Template Id Attribute
+                Attr ttIdAttr = document.createAttribute("Id");
+                ttIdAttr.setValue(String.valueOf(tt.getId()));
+                ttElement.setAttributeNode(ttIdAttr);
+
+                // Transformation Template Name Element
+                Element ttName = document.createElement("Name");
+                ttName.appendChild(document.createTextNode(tt.getName()));
+                ttElement.appendChild(ttName);
+
+                // Transformation Template Type Element
+                Element ttType = document.createElement("Type");
+                ttType.appendChild(document.createTextNode(tt.getType()));
+                ttElement.appendChild(ttType);
+
+                // Transformation Template Description Element
+                Element ttDescription = document.createElement("Description");
+                ttDescription.appendChild(document.createTextNode(tt.getDescription()));
+                ttElement.appendChild(ttDescription);
+
+                // Transformation Template File URI
+                Element ttFile = document.createElement("FileURI");
+                ttFile.appendChild(document.createTextNode(tt.getFileUri()));
+                ttElement.appendChild(ttFile);
+
+                // Transformation Template PrimaryImplementedConceptID Element
+                Element ttPrimaryConcept = document.createElement("PrimaryImplementedConceptID");
+                ttPrimaryConcept
+                        .appendChild(document.createTextNode(tt.getPrimaryImplementedConcept().getId().toString()));
+                ttElement.appendChild(ttPrimaryConcept);
+
+                // Transformation Template ImplmementedConceptsForVariation Element
+                Element ttVariationConcepts = document.createElement("ImplmementedConceptsForVariation");
+                ttElement.appendChild(ttVariationConcepts);
+                for (Concept varConcept : tt.getImplmementedConceptsForVariation()) {
+                    // Variation Concept Element
+                    Element ttVariationConcept = document.createElement("ImplementedConceptForVariationID");
+                    ttVariationConcept.appendChild(document.createTextNode(varConcept.getId().toString()));
+                    ttVariationConcepts.appendChild(ttVariationConcept);
                 }
-
-                // PDM : Transformation Template Element
-                Element TransformationTemplatesElement = document.createElement("TransformationTemplates");
-                pdmElement.appendChild(TransformationTemplatesElement);
-                for (TransformationTemplate tt : pdm.getPdmTransformationTemplate()) {
-                    // Transformation Template Element
-                    Element ttElement = document.createElement("TransformationTemplate");
-                    TransformationTemplatesElement.appendChild(ttElement);
-
-                    // Transformation Template Id Attribute
-                    Attr ttIdAttr = document.createAttribute("Id");
-                    ttIdAttr.setValue(String.valueOf(tt.getId()));
-                    ttElement.setAttributeNode(ttIdAttr);
-
-                    // Transformation Template Name Element
-                    Element ttName = document.createElement("Name");
-                    ttName.appendChild(document.createTextNode(tt.getName()));
-                    ttElement.appendChild(ttName);
-
-                    // Transformation Template Type Element
-                    Element ttType = document.createElement("Type");
-                    ttType.appendChild(document.createTextNode(tt.getType()));
-                    ttElement.appendChild(ttType);
-
-                    // Transformation Template Description Element
-                    Element ttDescription = document.createElement("Description");
-                    ttDescription.appendChild(document.createTextNode(tt.getDescription()));
-                    ttElement.appendChild(ttDescription);
-
-                    // Transformation Template File URI
-                    Element ttFile = document.createElement("FileURI");
-                    ttFile.appendChild(document.createTextNode(tt.getFileUri()));
-                    ttElement.appendChild(ttFile);
-
-                    // Transformation Template PrimaryImplementedConceptID Element
-                    Element ttPrimaryConcept = document.createElement("PrimaryImplementedConceptID");
-                    ttPrimaryConcept
-                            .appendChild(document.createTextNode(tt.getPrimaryImplementedConcept().getId().toString()));
-                    ttElement.appendChild(ttPrimaryConcept);
-
-                    // Transformation Template ImplmementedConceptsForVariation Element
-                    Element ttVariationConcepts = document.createElement("ImplmementedConceptsForVariation");
-                    ttElement.appendChild(ttVariationConcepts);
-                    for (Concept varConcept : tt.getImplmementedConceptsForVariation()) {
-                        // Variation Concept Element
-                        Element ttVariationConcept = document.createElement("ImplementedConceptForVariationID");
-                        ttVariationConcept.appendChild(document.createTextNode(varConcept.getId().toString()));
-                        ttVariationConcepts.appendChild(ttVariationConcept);
-                    }
-                }
-
             }
 
             // Create the MDE Tool save Path in Documents
@@ -253,6 +250,10 @@ public class XML {
             String projectPath = documentMDEToolPath + "\\" + ApplicationManager.instance().getProjectManager().getProject().getName();
             UserInterfaceUtil.createFolder(projectPath);
 
+            // Create the PDMs folder
+            String PDMsPath = documentMDEToolPath + "\\PDMs";
+            UserInterfaceUtil.createFolder(PDMsPath);
+
             // create the xml file
             // transform the DOM Object to an XML File
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -260,7 +261,7 @@ public class XML {
             DOMSource domSource = new DOMSource(document);
 
             // Docuemnts save xml file
-            StreamResult streamResultDoc = new StreamResult(new File(projectPath + "\\UQARMDE_PDMs.xml").getPath());
+            StreamResult streamResultDoc = new StreamResult(new File(PDMsPath + "\\PDM_"+ pdm.getName() +".xml").getPath());
             transformer.transform(domSource, streamResultDoc);
             
 
@@ -273,9 +274,9 @@ public class XML {
         }
     }
 
-    public static List<PDM> ImportPDMs(String xmlFile){
+    public static ArrayList<PDM> ImportPDMs(String xmlFile){
 
-        List<PDM> PDMs = new ArrayList<PDM>();
+        ArrayList<PDM> PDMs = new ArrayList<PDM>();
 
         try{
 

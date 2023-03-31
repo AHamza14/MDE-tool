@@ -249,8 +249,8 @@ public class TransformationTemplateHandler implements IDialogHandler {
         // Choose File Button
         ChooseFile.addActionListener((ActionListener) new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String filePath =  UserInterfaceUtil.getFilePath("XSL Format", "XSL", null,"Choose transformation template");
-                File.setText(filePath == null?"":filePath.replace("\\\\", "\\"));
+                ArrayList<String> filePaths =  UserInterfaceUtil.getFilePath("XSL Format", "XSL", null,"Choose transformation template", false);
+                File.setText(filePaths.get(0) == null?"":filePaths.get(0).replace("\\\\", "\\"));
             }
         });
     }

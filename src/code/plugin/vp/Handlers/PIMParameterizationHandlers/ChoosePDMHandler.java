@@ -11,8 +11,8 @@ import code.plugin.vp.Structures.PDM;
 import code.plugin.vp.Utilities.UserInterfaceUtil;
 
 public class ChoosePDMHandler implements IDialogHandler {
-    List<PDM> SelectedPdms;
-    List<PDM> Pdms;
+    ArrayList<PDM> SelectedPdms;
+    ArrayList<PDM> Pdms;
     JList<String> PdmsList = new JList<String>(); 
     JButton SaveButton = new JButton("Save");
     JButton CancelButton = new JButton("Cancel");
@@ -20,7 +20,7 @@ public class ChoosePDMHandler implements IDialogHandler {
     JLabel titleLabel;
 
 
-    public ChoosePDMHandler(List<PDM> pdms, String title, int selectionMode){
+    public ChoosePDMHandler(ArrayList<PDM> pdms, String title, int selectionMode){
         Pdms = pdms;
         SelectedPdms = new ArrayList<PDM>();
 

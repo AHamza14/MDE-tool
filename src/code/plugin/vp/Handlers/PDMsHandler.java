@@ -12,6 +12,7 @@ import com.vp.plugin.*;
 import com.vp.plugin.view.*;
 
 import code.plugin.vp.Structures.*;
+import code.plugin.vp.Utilities.TemplateGeneration;
 import code.plugin.vp.Utilities.XML;
 
 public class PDMsHandler extends JFrame implements IDialogHandler {
@@ -190,7 +191,11 @@ public class PDMsHandler extends JFrame implements IDialogHandler {
         // Save the PDMs
         SaveButton.addActionListener(e -> {
             if (PdmTable.getModel().getRowCount() > 0) {
-                XML.ExportPDMs(Pdm);
+                for (PDM pdm : Pdm) {
+                    XML.ExportPDM(pdm);
+                }
+                
+                //TemplateGeneration.CreateTransformationTemplates(Pdm);
                 JOptionPane.showMessageDialog(null, "XML File created");
             } else {
                 JOptionPane.showMessageDialog(null, "There is no PDM in the Table");

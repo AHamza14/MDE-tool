@@ -39,7 +39,7 @@ import code.plugin.vp.Structures.PIMParameterization.MarkedUmlElement;
 import code.plugin.vp.Structures.PIMParameterization.VPProject;
 
 public class PIMParameterizationHandler implements IDialogHandler {
-    List<PDM> PDMs;
+    ArrayList<PDM> PDMs = new ArrayList<PDM>(); 
     List<PDM> SelectedPdms;
     
     Map<String, Map<PDM, List<MarkedDesignConcern>>> markedDesignConcern;
@@ -52,9 +52,16 @@ public class PIMParameterizationHandler implements IDialogHandler {
     JButton CloseButton = new JButton("Close");
     
 
-    public PIMParameterizationHandler(String paraPdmXmlFile) {
+    public PIMParameterizationHandler(ArrayList<String> paraPdmXmlFile) {
         markedDesignConcern = new HashMap<String, Map<PDM, List<MarkedDesignConcern>>>();
-        PDMs = XML.ImportPDMs(paraPdmXmlFile);
+
+        for (String pdmPath : paraPdmXmlFile) {
+            for (PDM apdm : XML.ImportPDMs(pdmPath)) {
+                UserInterfaceUtil.logMessage(apdm.getName());
+                PDMs.add(apdm);
+            }
+        }
+        //PDMs = XML.ImportPDMs(paraPdmXmlFile);
 
         // get the pdm
         ViewManager vm = ApplicationManager.instance().getViewManager();
