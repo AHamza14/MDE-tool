@@ -2,16 +2,16 @@ package code.plugin.vp.Structures.PIMParameterization;
 
 import code.plugin.vp.Structures.DesignConcern;
 
-public class MarkedDesignConcern {
+public class ParameterizedDesignConcern {
 
     private DesignConcern DesignConcern;
     private String Value;
     private String Pdm;
 
 
-    public MarkedDesignConcern() {}
+    public ParameterizedDesignConcern() {}
 
-    public MarkedDesignConcern(DesignConcern designConcern, String parValue, String pdm){
+    public ParameterizedDesignConcern(DesignConcern designConcern, String parValue, String pdm){
         this.DesignConcern = designConcern;
         this.Value = parValue;
         this.Pdm = pdm;

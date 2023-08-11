@@ -1,4 +1,4 @@
-package code.plugin.vp.Handlers.PIMParameterizationHandlers;
+package code.plugin.vp.UserInterface.PIMParameterizationDialogs;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -34,17 +34,17 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import code.plugin.vp.Structures.*;
-import code.plugin.vp.Structures.PIMParameterization.MarkedDesignConcern;
-import code.plugin.vp.Structures.PIMParameterization.MarkedUmlElement;
+import code.plugin.vp.Structures.PIMParameterization.ParameterizedDesignConcern;
+import code.plugin.vp.Structures.PIMParameterization.ParameterizedUmlElement;
 import code.plugin.vp.Structures.PIMParameterization.VPProject;
 
-public class PIMParameterizationHandler implements IDialogHandler {
+public class PIMParameterizationDialog implements IDialogHandler {
     ArrayList<PDM> PDMs = new ArrayList<PDM>(); 
     List<PDM> SelectedPdms;
     
-    Map<String, Map<PDM, List<MarkedDesignConcern>>> markedDesignConcern;
-    List<MarkedUmlElement> ParameterizedUmlElements;
-    MarkingDesignConcernHandler designConcernsHandler;
+    Map<String, Map<PDM, List<ParameterizedDesignConcern>>> markedDesignConcern;
+    List<ParameterizedUmlElement> ParameterizedUmlElements;
+    DesignConcernParameterizerDialog designConcernsHandler;
 
     JTree PdmTree = new JTree();
     JButton SaveButton = new JButton("Save");
@@ -52,8 +52,8 @@ public class PIMParameterizationHandler implements IDialogHandler {
     JButton CloseButton = new JButton("Close");
     
 
-    public PIMParameterizationHandler(ArrayList<String> paraPdmXmlFile) {
-        markedDesignConcern = new HashMap<String, Map<PDM, List<MarkedDesignConcern>>>();
+    public PIMParameterizationDialog(ArrayList<String> paraPdmXmlFile) {
+        markedDesignConcern = new HashMap<String, Map<PDM, List<ParameterizedDesignConcern>>>();
 
         for (String pdmPath : paraPdmXmlFile) {
             for (PDM apdm : XML.ImportPDMs(pdmPath)) {
@@ -65,7 +65,7 @@ public class PIMParameterizationHandler implements IDialogHandler {
 
         // get the pdm
         ViewManager vm = ApplicationManager.instance().getViewManager();
-        ChoosePDMHandler pdmHandler = new ChoosePDMHandler(PDMs, "Select PDM(s) for parameterization", ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        PDMChooserDialog pdmHandler = new PDMChooserDialog(PDMs, "Select PDM(s) for parameterization", ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         vm.showDialog(pdmHandler);
         SelectedPdms = pdmHandler.getPdm();
 
@@ -79,7 +79,7 @@ public class PIMParameterizationHandler implements IDialogHandler {
 
         ParameterizedUmlElements = XML.getParameterizedUmlElements();
         if(ParameterizedUmlElements == null){
-            ParameterizedUmlElements = new ArrayList<MarkedUmlElement>();
+            ParameterizedUmlElements = new ArrayList<ParameterizedUmlElement>();
         }
         getComponent();
         
@@ -151,7 +151,7 @@ public class PIMParameterizationHandler implements IDialogHandler {
                 // Export Project (Parameterzed PIM Model to XML)
                 List<VPProject> xmlMarkedProjects = markedProjects;
                 for (VPProject vpProject : xmlMarkedProjects) {
-                    for (MarkedUmlElement mue : vpProject.getMarkedUmlElements()){
+                    for (ParameterizedUmlElement mue : vpProject.getMarkedUmlElements()){
                         if(mue.getDesignConcerns().isEmpty()){
                             vpProject.getMarkedUmlElements().remove(mue);
                         }
@@ -208,33 +208,33 @@ public class PIMParameterizationHandler implements IDialogHandler {
                     // Begin Marking
                     ViewManager vm = ApplicationManager.instance().getViewManager();
 
-                    Map<PDM, List<MarkedDesignConcern>> pdmDDsMap =  markedDesignConcern.get(selectedUmlElement.getId());
-                    List<MarkedDesignConcern> markedDDs = null;
+                    Map<PDM, List<ParameterizedDesignConcern>> pdmDDsMap =  markedDesignConcern.get(selectedUmlElement.getId());
+                    List<ParameterizedDesignConcern> markedDDs = null;
                     if(pdmDDsMap != null){
                         markedDDs = pdmDDsMap.get(selectedUmlElementPdm);
                     }
                     
                     
 
-                    designConcernsHandler = new MarkingDesignConcernHandler(selectedUmlElementPdm, selectedUmlElement.getId(), umlElementType, markedDDs);
+                    designConcernsHandler = new DesignConcernParameterizerDialog(selectedUmlElementPdm, selectedUmlElement.getId(), umlElementType, markedDDs);
                     //designConcernsHandler = new DesignConcernMarkingHandler(selectedUmlElementPdm, selectedUmlElement.getId(), umlElementType, markedDesignConcern.get(selectedUmlElementPdm));
                     vm.showDialog(designConcernsHandler);
 
-                    HashMap<PDM, List<MarkedDesignConcern>> pdmDDs = new HashMap<PDM, List<MarkedDesignConcern>>();
+                    HashMap<PDM, List<ParameterizedDesignConcern>> pdmDDs = new HashMap<PDM, List<ParameterizedDesignConcern>>();
                     pdmDDs.put(selectedUmlElementPdm, designConcernsHandler.getDesignConcernsMarking());
                     markedDesignConcern.put(selectedUmlElement.getId(), pdmDDs);
                     
                     //markedDesignConcern = designConcernsHandler.getDesignConcernsMarking();
 
                     if(ParameterizedUmlElements.stream().filter(pue -> pue.getId().equals(selectedUmlElement.getId())).findFirst().isPresent()){
-                        MarkedUmlElement existedUmlEmenet = ParameterizedUmlElements.stream().filter(ue -> selectedUmlElement.getId().equals(ue.getId())).findFirst().orElse(null);
+                        ParameterizedUmlElement existedUmlEmenet = ParameterizedUmlElements.stream().filter(ue -> selectedUmlElement.getId().equals(ue.getId())).findFirst().orElse(null);
 
-                        List<MarkedDesignConcern> existedDDs = existedUmlEmenet.getDesignConcerns();
+                        List<ParameterizedDesignConcern> existedDDs = existedUmlEmenet.getDesignConcerns();
                         
-                        existedUmlEmenet.setDesignConcerns(new ArrayList<MarkedDesignConcern>());
+                        existedUmlEmenet.setDesignConcerns(new ArrayList<ParameterizedDesignConcern>());
                         
                         for (PDM pdm : markedDesignConcern.get(selectedUmlElement.getId()).keySet()) {
-                            for (MarkedDesignConcern ddmarking : markedDesignConcern.get(selectedUmlElement.getId()).get(pdm))
+                            for (ParameterizedDesignConcern ddmarking : markedDesignConcern.get(selectedUmlElement.getId()).get(pdm))
                             {
                                 existedUmlEmenet.getDesignConcerns().add(ddmarking);
                             }
@@ -243,7 +243,7 @@ public class PIMParameterizationHandler implements IDialogHandler {
                         for (String existedDDId : existedDDs.stream().map((dd) -> dd.getDesignConcern().getId().toString()).collect(Collectors.toList()))
                         {
                             if(!existedUmlEmenet.getDesignConcerns().stream().map((dd) -> dd.getDesignConcern().getId().toString()).collect(Collectors.toList()).contains(existedDDId)){
-                                MarkedDesignConcern ddtoAdd = existedDDs.stream().filter(ue -> ue.getDesignConcern().getId().equals(UUID.fromString(existedDDId))).findFirst().orElse(null);
+                                ParameterizedDesignConcern ddtoAdd = existedDDs.stream().filter(ue -> ue.getDesignConcern().getId().equals(UUID.fromString(existedDDId))).findFirst().orElse(null);
                                 if(ddtoAdd != null){
                                     existedUmlEmenet.getDesignConcerns().add(ddtoAdd);
                                 }
@@ -252,7 +252,7 @@ public class PIMParameterizationHandler implements IDialogHandler {
                         
                     }
                     else{
-                        ParameterizedUmlElements.add(new MarkedUmlElement(selectedUmlElement.getId(),   
+                        ParameterizedUmlElements.add(new ParameterizedUmlElement(selectedUmlElement.getId(),   
                         fullQualifiedName,
                         selectedUmlElement.getName(),
                         umlElementType,
@@ -320,17 +320,17 @@ public class PIMParameterizationHandler implements IDialogHandler {
     // Apply the Stereotypes and Tagged Values
     public void PIMModelParameterization(VPProject project) {
         
-        Map<IModelElement, MarkedUmlElement> markedUmlElements = getMarkedDiagramElements(project);
+        Map<IModelElement, ParameterizedUmlElement> markedUmlElements = getMarkedDiagramElements(project);
 
 
-        for (Map.Entry<IModelElement, MarkedUmlElement> element : markedUmlElements.entrySet()) {
+        for (Map.Entry<IModelElement, ParameterizedUmlElement> element : markedUmlElements.entrySet()) {
             IModelElement modelElement = element.getKey();
-            MarkedUmlElement markedUmlElement = element.getValue();
+            ParameterizedUmlElement markedUmlElement = element.getValue();
 
             ITaggedValueContainer taggedValuesContainer = IModelElementFactory.instance().createTaggedValueContainer();
             
             if (!markedUmlElement.getDesignConcerns().isEmpty()) {
-                for (MarkedDesignConcern designConcern : markedUmlElement.getDesignConcerns()) {
+                for (ParameterizedDesignConcern designConcern : markedUmlElement.getDesignConcerns()) {
                     
                     if (designConcern.getDesignConcern().getType().equals("Stereotype") 
                         && designConcern.getValue() == "Yes"
@@ -379,13 +379,13 @@ public class PIMParameterizationHandler implements IDialogHandler {
     }
 
     //Map the diagram UML elements to the created marked uml elements
-    private Map<IModelElement, MarkedUmlElement> getMarkedDiagramElements(VPProject project) {
-        Map<IModelElement, MarkedUmlElement> markeDiagramElements = new HashMap<IModelElement, MarkedUmlElement>();
+    private Map<IModelElement, ParameterizedUmlElement> getMarkedDiagramElements(VPProject project) {
+        Map<IModelElement, ParameterizedUmlElement> markeDiagramElements = new HashMap<IModelElement, ParameterizedUmlElement>();
 
         IDiagramElement[] diagramUmlElements = ApplicationManager.instance().getDiagramManager().getActiveDiagram()
                 .toDiagramElementArray();
 
-        for (MarkedUmlElement markedumlElement : project.getMarkedUmlElements()) {
+        for (ParameterizedUmlElement markedumlElement : project.getMarkedUmlElements()) {
             for (IDiagramElement diagramElement : diagramUmlElements) {
                 IModelElement modelElement = diagramElement.getModelElement();
 
@@ -419,7 +419,7 @@ public class PIMParameterizationHandler implements IDialogHandler {
                 IClass classModel = (IClass) classShape.getModelElement();
 
                 for (IModelElement classChild : classModel.toChildArray()) {
-                    for (MarkedUmlElement markedumlElement : project.getMarkedUmlElements()) {
+                    for (ParameterizedUmlElement markedumlElement : project.getMarkedUmlElements()) {
                         if ((markedumlElement.getType().equals("Attribute")
                                 || markedumlElement.getType().equals("Operation"))
                                 && markedumlElement.getId().equals(classChild.getId())) {
@@ -433,7 +433,7 @@ public class PIMParameterizationHandler implements IDialogHandler {
                 // Parameters
                 for (IOperation operation : classModel.toOperationArray()) {
                     for (IModelElement parameter : operation.toParameterArray()) {
-                        for (MarkedUmlElement markedumlElement : project.getMarkedUmlElements()) {
+                        for (ParameterizedUmlElement markedumlElement : project.getMarkedUmlElements()) {
 
                             if (markedumlElement.getType().equals("Parameter")
                                     && markedumlElement.getId().equals(parameter.getId())) {
@@ -454,7 +454,7 @@ public class PIMParameterizationHandler implements IDialogHandler {
                 System.arraycopy(fromAssociation, 0, allAssociationEnds, tol, froml);
                 
                 for (IModelElement association : allAssociationEnds) {
-                    for (MarkedUmlElement markedumlElement : project.getMarkedUmlElements()) {
+                    for (ParameterizedUmlElement markedumlElement : project.getMarkedUmlElements()) {
                         if (markedumlElement.getType().equals("AssociationEnd")
                             && markedumlElement.getId().equals(association.getId())) {
                             markeDiagramElements.put(association, markedumlElement);
@@ -470,7 +470,7 @@ public class PIMParameterizationHandler implements IDialogHandler {
     }
 
     //Create the Stereotype
-    private IStereotype  createStereoType(MarkedDesignConcern designConcern, IModelElement modelElement){
+    private IStereotype  createStereoType(ParameterizedDesignConcern designConcern, IModelElement modelElement){
 
         String modelType = "";
 
@@ -518,7 +518,7 @@ public class PIMParameterizationHandler implements IDialogHandler {
     }
 
     //Create Tagged Value
-    private ITaggedValue createTaggedValues(MarkedDesignConcern designConcern){
+    private ITaggedValue createTaggedValues(ParameterizedDesignConcern designConcern){
 
         ITaggedValue taggedValue = IModelElementFactory.instance().createTaggedValue();
         taggedValue.setName(designConcern.getDesignConcern().getName());

@@ -1,4 +1,4 @@
-package code.plugin.vp.Handlers.PIMParameterizationHandlers;
+package code.plugin.vp.UserInterface.PIMParameterizationDialogs;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 

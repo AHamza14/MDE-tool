@@ -1,7 +1,7 @@
 package code.plugin.vp.Utilities;
 
 
-public class Constants {
+public class Enums {
 
     public static String TableColumns[] = new String[] {"Id", "Name"};
 
@@ -9,7 +9,7 @@ public class Constants {
 
     public static String PdmColumn[] = new String[] {"PDM"};
 
-    public static String TransformationTemmplateTypes[] = new String[] {"QVT", "XSLT"};
+    public static String TransformationTypes[] = new String[] {"QVT", "XSLT"};
     
     public static String DesignConcernTypes[] = new String[] {"Stereotype", "Tagged Value"};
 

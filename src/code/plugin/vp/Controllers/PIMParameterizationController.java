@@ -1,4 +1,4 @@
-package code.plugin.vp.Controls;
+package code.plugin.vp.Controllers;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -9,11 +9,10 @@ import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPContext;
 import com.vp.plugin.action.VPContextActionController;
 
-import code.plugin.vp.Handlers.PIMParameterizationHandlers.PIMParameterizationHandler;
-//import code.plugin.vp.Structures.PIMParameterization.MarkedUmlElement;
+import code.plugin.vp.UserInterface.PIMParameterizationDialogs.PIMParameterizationDialog;
 import code.plugin.vp.Utilities.UserInterfaceUtil;
 
-public class PIMParameterizationControl implements VPContextActionController {
+public class PIMParameterizationController implements VPContextActionController {
 
 	private ArrayList<String> PdmXMlPath;
 	
@@ -24,7 +23,7 @@ public class PIMParameterizationControl implements VPContextActionController {
 		
 		if(PdmXMlPath != null){
 			ViewManager vm =  ApplicationManager.instance().getViewManager();
-			PIMParameterizationHandler d = new PIMParameterizationHandler(PdmXMlPath);
+			PIMParameterizationDialog d = new PIMParameterizationDialog(PdmXMlPath);
 			vm.showDialog(d);
 		}
 		  	    	    

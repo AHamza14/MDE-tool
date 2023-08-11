@@ -1,4 +1,4 @@
-package code.plugin.vp.Handlers;
+package code.plugin.vp.UserInterface;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -13,10 +13,10 @@ import javax.swing.*;
 import com.vp.plugin.view.*;
 
 import code.plugin.vp.Structures.DesignConcern;
-import code.plugin.vp.Utilities.Constants;
+import code.plugin.vp.Utilities.Enums;
 import code.plugin.vp.Utilities.UserInterfaceUtil;
 
-public class DesignConcernHandler implements IDialogHandler {
+public class DesignConcernDialog implements IDialogHandler {
     
     //Logic
     DesignConcern DesignConcern;
@@ -40,8 +40,8 @@ public class DesignConcernHandler implements IDialogHandler {
     JButton CancelButton = new JButton("Cancel");
     JButton CloseButton = new JButton("Close");
 
-    public DesignConcernHandler(UUID paraId) {
-        DefaultComboBoxModel<String> modelType = new DefaultComboBoxModel<String>(Constants.DesignConcernTypes);
+    public DesignConcernDialog(UUID paraId) {
+        DefaultComboBoxModel<String> modelType = new DefaultComboBoxModel<String>(Enums.DesignConcernTypes);
         Type.setModel(modelType);
 
         getComponent();
@@ -50,10 +50,10 @@ public class DesignConcernHandler implements IDialogHandler {
         DesignConcern = new DesignConcern();
     }
 
-    public DesignConcernHandler(DesignConcern dd) {
-        DefaultComboBoxModel<String> modelType = new DefaultComboBoxModel<String>(Constants.DesignConcernTypes);
+    public DesignConcernDialog(DesignConcern dd) {
+        DefaultComboBoxModel<String> modelType = new DefaultComboBoxModel<String>(Enums.DesignConcernTypes);
         Type.setModel(modelType);
-        Type.setSelectedIndex(Arrays.asList(Constants.DesignConcernTypes).indexOf(dd.getType()));
+        Type.setSelectedIndex(Arrays.asList(Enums.DesignConcernTypes).indexOf(dd.getType()));
 
         //Here when modifing existing Design concern you must check the the uml elements of it
         for (JCheckBox jCheckBox : UmlElementsCheckBox) {

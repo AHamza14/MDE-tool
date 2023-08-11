@@ -1,4 +1,4 @@
-package code.plugin.vp.Handlers.PIMParameterizationHandlers;
+package code.plugin.vp.UserInterface.PIMParameterizationDialogs;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -15,18 +15,18 @@ import javax.swing.table.TableColumn;
 import com.vp.plugin.view.*;
 
 import code.plugin.vp.Structures.*;
-import code.plugin.vp.Structures.PIMParameterization.MarkedDesignConcern;
-import code.plugin.vp.Utilities.Constants;
+import code.plugin.vp.Structures.PIMParameterization.ParameterizedDesignConcern;
+import code.plugin.vp.Utilities.Enums;
 import code.plugin.vp.Utilities.UserInterfaceUtil;
 import code.plugin.vp.Utilities.XML;
 
-public class MarkingDesignConcernHandler implements IDialogHandler {
+public class DesignConcernParameterizerDialog implements IDialogHandler {
     
-    private List<MarkedDesignConcern> DesignConcerns;
+    private List<ParameterizedDesignConcern> DesignConcerns;
 
-    JTable StereotypesTable = new JTable(new DefaultTableModel(Constants.DesignConcernMarkingTableColumns, 0));
+    JTable StereotypesTable = new JTable(new DefaultTableModel(Enums.DesignConcernMarkingTableColumns, 0));
 
-    JTable TaggedValuesTable = new JTable(new DefaultTableModel(Constants.DesignConcernMarkingTableColumns, 0));
+    JTable TaggedValuesTable = new JTable(new DefaultTableModel(Enums.DesignConcernMarkingTableColumns, 0));
 
     PDM Pdm;
 
@@ -34,7 +34,7 @@ public class MarkingDesignConcernHandler implements IDialogHandler {
     JButton CancelButton = new JButton("Cancel");
     JButton CloseButton = new JButton("Close");
 
-    public MarkingDesignConcernHandler(PDM pdm, String umlElementId, String umlElementType,  List<MarkedDesignConcern> alreadyMarkedDCs){
+    public DesignConcernParameterizerDialog(PDM pdm, String umlElementId, String umlElementType,  List<ParameterizedDesignConcern> alreadyMarkedDCs){
 
         //Create column with predefined values "yes" or "no" for steretypes.
         TableColumn valueColumn = StereotypesTable.getColumnModel().getColumn(2);
@@ -46,7 +46,7 @@ public class MarkingDesignConcernHandler implements IDialogHandler {
         //end
 
         if(alreadyMarkedDCs == null){
-            DesignConcerns = new ArrayList<MarkedDesignConcern>();
+            DesignConcerns = new ArrayList<ParameterizedDesignConcern>();
         }
         else{
             DesignConcerns = alreadyMarkedDCs;
@@ -64,7 +64,7 @@ public class MarkingDesignConcernHandler implements IDialogHandler {
                             designConcernValue = markedDesignConcerns.get(designConcern.getId().toString());
                         }
                         if(!DesignConcerns.isEmpty()){
-                            MarkedDesignConcern alreadyDesignConcern = DesignConcerns.stream().filter(ue -> designConcern.getId().equals(ue.getDesignConcern().getId())).findFirst().orElse(null);
+                            ParameterizedDesignConcern alreadyDesignConcern = DesignConcerns.stream().filter(ue -> designConcern.getId().equals(ue.getDesignConcern().getId())).findFirst().orElse(null);
                             designConcernValue = alreadyDesignConcern == null? null: alreadyDesignConcern.getValue();
                         }
 
@@ -193,7 +193,7 @@ public class MarkingDesignConcernHandler implements IDialogHandler {
         for (int i=0; i < designConcernModel.getRowCount(); i++) {
 
             String ddId = designConcernModel.getValueAt(i, 0).toString();
-            MarkedDesignConcern existedDesicnConcernMarking = DesignConcerns.stream().filter(dd -> UUID.fromString(ddId).equals(dd.getDesignConcern().getId())).findFirst().orElse(null);
+            ParameterizedDesignConcern existedDesicnConcernMarking = DesignConcerns.stream().filter(dd -> UUID.fromString(ddId).equals(dd.getDesignConcern().getId())).findFirst().orElse(null);
 
             if(existedDesicnConcernMarking == null){
                 for (Concept concept : Pdm.getPdmUmlProfile().getConcepts()) {
@@ -201,7 +201,7 @@ public class MarkingDesignConcernHandler implements IDialogHandler {
                         if(designConcernModel.getValueAt(i, 2).toString() != "" 
                         && dd.getId().equals(UUID.fromString(ddId))){
                             
-                            DesignConcerns.add(new MarkedDesignConcern(dd, designConcernModel.getValueAt(i, 2).toString(), Pdm.getName()));
+                            DesignConcerns.add(new ParameterizedDesignConcern(dd, designConcernModel.getValueAt(i, 2).toString(), Pdm.getName()));
                         }
                     }
                 }
@@ -212,7 +212,7 @@ public class MarkingDesignConcernHandler implements IDialogHandler {
         } 
     }
 
-    public List<MarkedDesignConcern> getDesignConcernsMarking(){
+    public List<ParameterizedDesignConcern> getDesignConcernsMarking(){
         return DesignConcerns;
     }
 }

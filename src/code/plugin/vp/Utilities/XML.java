@@ -30,10 +30,10 @@ import code.plugin.vp.Structures.Concept;
 import code.plugin.vp.Structures.Constraint;
 import code.plugin.vp.Structures.DesignConcern;
 import code.plugin.vp.Structures.PDM;
-import code.plugin.vp.Structures.TransformationTemplate;
+import code.plugin.vp.Structures.Transformation;
 import code.plugin.vp.Structures.UmlProfile;
-import code.plugin.vp.Structures.PIMParameterization.MarkedDesignConcern;
-import code.plugin.vp.Structures.PIMParameterization.MarkedUmlElement;
+import code.plugin.vp.Structures.PIMParameterization.ParameterizedDesignConcern;
+import code.plugin.vp.Structures.PIMParameterization.ParameterizedUmlElement;
 import code.plugin.vp.Structures.PIMParameterization.VPProject;
 
 public class XML {
@@ -195,7 +195,7 @@ public class XML {
             // PDM : Transformation Template Element
             Element TransformationTemplatesElement = document.createElement("TransformationTemplates");
             pdmElement.appendChild(TransformationTemplatesElement);
-            for (TransformationTemplate tt : pdm.getPdmTransformationTemplate()) {
+            for (Transformation tt : pdm.getPdmTransformationTemplate()) {
                 // Transformation Template Element
                 Element ttElement = document.createElement("TransformationTemplate");
                 TransformationTemplatesElement.appendChild(ttElement);
@@ -409,7 +409,7 @@ public class XML {
                     //PDM : Transformation Templates : Transformation Template
                     NodeList TransformationTemplateList = pdmTransformationTemplatesElement.getElementsByTagName("TransformationTemplate");
 
-                    List<TransformationTemplate> transformationTemplates = new ArrayList<TransformationTemplate>();
+                    List<Transformation> transformationTemplates = new ArrayList<Transformation>();
                     for (int j = 0; j < TransformationTemplateList.getLength(); j++) {
                         Node ttNode = TransformationTemplateList.item(j);
                         Element ttElement = (Element) ttNode;
@@ -448,7 +448,7 @@ public class XML {
                             }
                         }
 
-                        transformationTemplates.add(new TransformationTemplate(ttId, ttName, ttType, ttDescription, ttFileUri, primaryConcept, variationConcepts));
+                        transformationTemplates.add(new Transformation(ttId, ttName, ttType, ttDescription, ttFileUri, primaryConcept, variationConcepts));
 
                     }
 
@@ -503,7 +503,7 @@ public class XML {
                 projectElement.appendChild(umlElements);
 
                 //Project : Uml Elements : Uml Element
-                for(MarkedUmlElement markedUmlElement : project.getMarkedUmlElements()){
+                for(ParameterizedUmlElement markedUmlElement : project.getMarkedUmlElements()){
 
                     //Marked Uml Element
                     Element umlElement = document.createElement("UMLElement");
@@ -528,7 +528,7 @@ public class XML {
                     Element DesignConcernsElement = document.createElement("DesignConcerns");
                     umlElement.appendChild(DesignConcernsElement);
 
-                    for(MarkedDesignConcern designConcern: markedUmlElement.getDesignConcerns()){
+                    for(ParameterizedDesignConcern designConcern: markedUmlElement.getDesignConcerns()){
                         //Design Concern Element
                         Element designConcernElement = document.createElement("DesignConcern");
                         DesignConcernsElement.appendChild(designConcernElement);
@@ -649,8 +649,8 @@ public class XML {
         }
     }
 
-    public static List<MarkedUmlElement> getParameterizedUmlElements() throws IllegalArgumentException {
-        List<MarkedUmlElement> markedUmlElements = new ArrayList<MarkedUmlElement>();
+    public static List<ParameterizedUmlElement> getParameterizedUmlElements() throws IllegalArgumentException {
+        List<ParameterizedUmlElement> markedUmlElements = new ArrayList<ParameterizedUmlElement>();
 
         try{
 
@@ -694,7 +694,7 @@ public class XML {
                     // UML element design concern
                     NodeList designConcernList = designConcernsElement.getElementsByTagName("DesignConcern");
 
-                    List<MarkedDesignConcern> designConcerns = new ArrayList<MarkedDesignConcern>();
+                    List<ParameterizedDesignConcern> designConcerns = new ArrayList<ParameterizedDesignConcern>();
                     for (int j = 0; j < designConcernList.getLength(); j++) {
                         Node designConcernNode = designConcernList.item(j);
 
@@ -706,9 +706,9 @@ public class XML {
                         String designConcernValue = designConcernElement.getElementsByTagName("Value").item(0).getTextContent();
                         String designConcernPdm = designConcernElement.getElementsByTagName("Pdm").item(0).getTextContent();
 
-                        designConcerns.add(new MarkedDesignConcern(new DesignConcern(designConcernId, designConcernName, designConcernType, "", null), designConcernValue, designConcernPdm));
+                        designConcerns.add(new ParameterizedDesignConcern(new DesignConcern(designConcernId, designConcernName, designConcernType, "", null), designConcernValue, designConcernPdm));
                     }
-                    markedUmlElements.add(new MarkedUmlElement(umlElementId, umlElementFullQualifiedName, umlElementFullQualifiedName, umlElementType, designConcerns));
+                    markedUmlElements.add(new ParameterizedUmlElement(umlElementId, umlElementFullQualifiedName, umlElementFullQualifiedName, umlElementType, designConcerns));
                 }
 
                 

@@ -1,4 +1,4 @@
-package code.plugin.vp.Handlers.PIMParameterizationHandlers;
+package code.plugin.vp.UserInterface.PIMParameterizationDialogs;
 
 import java.awt.Component;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import com.vp.plugin.view.*;
 import code.plugin.vp.Structures.PDM;
 import code.plugin.vp.Utilities.UserInterfaceUtil;
 
-public class ChoosePDMHandler implements IDialogHandler {
+public class PDMChooserDialog implements IDialogHandler {
     ArrayList<PDM> SelectedPdms;
     ArrayList<PDM> Pdms;
     JList<String> PdmsList = new JList<String>(); 
@@ -20,7 +20,7 @@ public class ChoosePDMHandler implements IDialogHandler {
     JLabel titleLabel;
 
 
-    public ChoosePDMHandler(ArrayList<PDM> pdms, String title, int selectionMode){
+    public PDMChooserDialog(ArrayList<PDM> pdms, String title, int selectionMode){
         Pdms = pdms;
         SelectedPdms = new ArrayList<PDM>();
 

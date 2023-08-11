@@ -1,4 +1,4 @@
-package code.plugin.vp.Controls;
+package code.plugin.vp.Controllers;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -27,26 +26,21 @@ import com.vp.plugin.action.VPActionController;
 import com.vp.plugin.model.IProject;
 
 import code.plugin.vp.GlobalConfig;
-import code.plugin.vp.Handlers.PIMParameterizationHandlers.ChoosePDMHandler;
 import code.plugin.vp.Structures.PDM;
-import code.plugin.vp.Structures.TransformationTemplate;
+import code.plugin.vp.Structures.Transformation;
+import code.plugin.vp.UserInterface.PIMParameterizationDialogs.PDMChooserDialog;
 import code.plugin.vp.Utilities.UserInterfaceUtil;
 import code.plugin.vp.Utilities.XML;
 
 
 
-public class CodeGenerationControl implements VPActionController {
+public class CodeGenerationController implements VPActionController {
 
     @Override
     public void performAction(VPAction arg0) {
         //
         String savingPath = createSavingFolder();
         
-        // int reply = JOptionPane.showConfirmDialog(null, 
-        // "Before generating the code you need to: \n\n  Export the parameterized PIM as XML to the following folder: \n" + savingPath+"\n\nAlready done ?? ", 
-        // "Generating code", 
-        // JOptionPane.YES_NO_OPTION);
-        //if (reply == JOptionPane.YES_OPTION) {
         // get the pdm xml path
         ArrayList<String> pdmXMlPath = UserInterfaceUtil.getFilePath("Extensible Markup Language", "XML",null, "Select the PDMs file", false);
 
@@ -103,27 +97,25 @@ public class CodeGenerationControl implements VPActionController {
 
     private PDM getMainPdm(ArrayList<PDM> pdms){
         ViewManager vm = ApplicationManager.instance().getViewManager();
-        ChoosePDMHandler pdmHandler = new ChoosePDMHandler(pdms, "Select the main PDM", ListSelectionModel.SINGLE_SELECTION);
+        PDMChooserDialog pdmHandler = new PDMChooserDialog(pdms, "Select the main PDM", ListSelectionModel.SINGLE_SELECTION);
         vm.showDialog(pdmHandler);
         return pdmHandler.getPdm().iterator().next();
     }
     
     private void copyTransformations(PDM pdm, String savingPath) throws IOException {
         
-        for (TransformationTemplate tt : pdm.getPdmTransformationTemplate()) {
+        for (Transformation tt : pdm.getPdmTransformationTemplate()) {
             File ttFile = new File(tt.getFileUri().replace("\\", "\\\\"));
             Files.copy(ttFile.toPath(), new FileOutputStream(savingPath+"\\"+ttFile.getName(), true));
         }
     }
 
     private String createTransformationCommand(PDM pdm, String path){
-        //Or run the command when ever the files are
-        //example: "C:\Program Files\Saxonica\SaxonHE9.9N\bin\Transform" -t C:\...\project.xml C:\...\FeuilleCoreEnum.xsl
 
         String command = "cd \""+path+"\" ";
         String SaxonicaTransformPath = "\""+UserInterfaceUtil.getFilePath("Executable", "exe", GlobalConfig.getSaxonicaPath(), "Choose Saxonica file path", false).get(0)+"\"";
 
-        for (TransformationTemplate tt : pdm.getPdmTransformationTemplate()) {
+        for (Transformation tt : pdm.getPdmTransformationTemplate()) {
             File ttFile = new File(tt.getFileUri().replace("\\", "\\\\"));
             command += "&& "+SaxonicaTransformPath+" -t project.xml "+ttFile.getName()+" ";
         }

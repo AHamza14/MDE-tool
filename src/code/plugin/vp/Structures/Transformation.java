@@ -2,15 +2,15 @@ package code.plugin.vp.Structures;
 
 import java.util.*;
 
-public class TransformationTemplate extends ElementDefinition {
+public class Transformation extends ElementDefinition {
 
     private String FileUri;
     private Concept PrimaryImplementedConcept;
     private List<Concept> ImplmementedConceptsForVariation;
 
-    public TransformationTemplate(){}
+    public Transformation(){}
 
-    public TransformationTemplate(UUID parId, String parName, String parType, String parDescription, String parFileUri, Concept parPrimaryConcept, List<Concept> parConceptsVariation){
+    public Transformation(UUID parId, String parName, String parType, String parDescription, String parFileUri, Concept parPrimaryConcept, List<Concept> parConceptsVariation){
         super(parId, parName, parType, parDescription);
         this.FileUri = parFileUri;
         this.PrimaryImplementedConcept = parPrimaryConcept;
