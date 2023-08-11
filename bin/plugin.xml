@@ -2,7 +2,7 @@
     id="codeGeneration"
     description="VP Plugin to peforme MDE code generation"
     provider="hamza"
-    class="code.plugin.vp.MainCodeGeneration">
+    class="code.plugin.vp.MainMDE">
     <actionSets>
         <actionSet id="MDEActionSet">
 			<menu
@@ -19,7 +19,7 @@
                 style="normal"
                 icon="icons/pdm.png"
                 ribbonPath="MDEmenu/#">
-				<actionController class="code.plugin.vp.Controls.PDMControl"/>
+				<actionController class="code.plugin.vp.Controllers.PDMController"/>
 			</action>
 
 			<action
@@ -30,7 +30,7 @@
                 style="normal"
                 icon="icons/code.png"
                 ribbonPath="MDEmenu/PDMAction">
-				<actionController class="code.plugin.vp.Controls.CodeGenerationControl"/>
+				<actionController class="code.plugin.vp.Controllers.CodeGenerationController"/>
 			</action>
 		</actionSet>
         
@@ -66,7 +66,7 @@
                 label="Parameterize"
                 style="normal"
                 menuPath="mdeId/#">
-				<actionController class="code.plugin.vp.Controls.PIMParameterizationControl"/>
+				<actionController class="code.plugin.vp.Controllers.PIMParameterizationController"/>
 			</action>
         </contextSensitiveActionSet>
 

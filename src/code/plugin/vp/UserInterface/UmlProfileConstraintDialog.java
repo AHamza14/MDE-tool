@@ -1,4 +1,4 @@
-package code.plugin.vp.Handlers;
+package code.plugin.vp.UserInterface;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -13,10 +13,10 @@ import javax.swing.*;
 import com.vp.plugin.view.*;
 
 import code.plugin.vp.Structures.*;
-import code.plugin.vp.Utilities.Constants;
+import code.plugin.vp.Utilities.Enums;
 import code.plugin.vp.Utilities.UserInterfaceUtil;
 
-public class UmlProfileConstraintHandler implements IDialogHandler {
+public class UmlProfileConstraintDialog implements IDialogHandler {
     
     //Logic 
     Constraint UmlProfileConstraint;
@@ -33,9 +33,9 @@ public class UmlProfileConstraintHandler implements IDialogHandler {
     JButton CancelButton = new JButton("Cancel");
     JButton CloseButton = new JButton("Close");
 
-    public UmlProfileConstraintHandler(UUID paraId, List<Concept> concepts) {
+    public UmlProfileConstraintDialog(UUID paraId, List<Concept> concepts) {
         Concepts = concepts;
-        DefaultComboBoxModel<String> typeModel = new DefaultComboBoxModel<String>(Constants.ConstraintTypes);
+        DefaultComboBoxModel<String> typeModel = new DefaultComboBoxModel<String>(Enums.ConstraintTypes);
         Type.setModel(typeModel);
         
         List<String> StrConcepts = new ArrayList<String>();
@@ -55,12 +55,12 @@ public class UmlProfileConstraintHandler implements IDialogHandler {
         UmlProfileConstraint = new Constraint();
     }
 
-    public UmlProfileConstraintHandler(Constraint constraint, List<Concept> concepts) {
+    public UmlProfileConstraintDialog(Constraint constraint, List<Concept> concepts) {
         Concepts = concepts;
 
-        DefaultComboBoxModel<String> typeModel = new DefaultComboBoxModel<String>(Constants.ConstraintTypes);
+        DefaultComboBoxModel<String> typeModel = new DefaultComboBoxModel<String>(Enums.ConstraintTypes);
         Type.setModel(typeModel);
-        Type.setSelectedIndex(Arrays.asList(Constants.ConstraintTypes).indexOf(constraint.getType()));
+        Type.setSelectedIndex(Arrays.asList(Enums.ConstraintTypes).indexOf(constraint.getType()));
 
         List<String> StrConcepts = new ArrayList<String>();
         for(Concept concept: concepts){

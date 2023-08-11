@@ -1,10 +1,12 @@
-package code.plugin.vp.Controls;
+package code.plugin.vp.Controllers;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
+import java.nio.file.Files;
+import java.util.ArrayList;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -12,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingWorker;
+
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
@@ -23,45 +26,47 @@ import com.vp.plugin.action.VPActionController;
 import com.vp.plugin.model.IProject;
 
 import code.plugin.vp.GlobalConfig;
-import code.plugin.vp.Handlers.PIMParameterizationHandlers.ChoosePDMHandler;
 import code.plugin.vp.Structures.PDM;
-import code.plugin.vp.Structures.TransformationTemplate;
+import code.plugin.vp.Structures.Transformation;
+import code.plugin.vp.UserInterface.PIMParameterizationDialogs.PDMChooserDialog;
 import code.plugin.vp.Utilities.UserInterfaceUtil;
 import code.plugin.vp.Utilities.XML;
 
 
 
-public class CodeGenerationControl implements VPActionController {
+public class CodeGenerationController implements VPActionController {
 
     @Override
     public void performAction(VPAction arg0) {
         //
         String savingPath = createSavingFolder();
         
-        int reply = JOptionPane.showConfirmDialog(null, 
-        "Before generating the code you need to: \n\n  1) Create the transformation templates.\n  2) Export the parameterized PIM as XML.\n\nThen move all the files to the following folder: \n" + savingPath+"\n\nAlready done ?? ", 
-        "Generating code", 
-        JOptionPane.YES_NO_OPTION);
+        // get the pdm xml path
+        ArrayList<String> pdmXMlPath = UserInterfaceUtil.getFilePath("Extensible Markup Language", "XML",null, "Select the PDMs file", false);
 
-        if (reply == JOptionPane.YES_OPTION) {
-            // get the pdm xml path
-            String pdmXMlPath = UserInterfaceUtil.getFilePath("Extensible Markup Language", "XML",null, "Choose the platform descritpion models");
+        if (pdmXMlPath.get(0) != null) {
+            
+            exportPIMasXML(savingPath);
 
-            if (pdmXMlPath != null) {
-                
-                exportPIMasXML();
+            // Select Main PDM
+            PDM selectedPdm = getMainPdm(XML.ImportPDMs(pdmXMlPath.get(0)));
 
-                // Select Main PDM
-                PDM selectedPdm = getMainPdm(XML.ImportPDMs(pdmXMlPath));
-
-                // Create PDM transformations templates command
-                String ttCommand = createTransformationCommand(selectedPdm, savingPath);
-
-                // Run transformation template command line
-                runTransformationCommand(ttCommand, savingPath);
+            try {
+                copyTransformations(selectedPdm, savingPath);
+            } catch (IOException e) {
+                ApplicationManager.instance().getViewManager().showMessage(e.getMessage());
             }
-        } 
+
+            // Create PDM transformations templates command
+            String ttCommand = createTransformationCommand(selectedPdm, savingPath);
+
+            // Run transformation template command line
+            runTransformationCommand(ttCommand, savingPath);
+        }
+        
     }
+
+    
 
     @Override
     public void update(VPAction arg0) {
@@ -82,31 +87,39 @@ public class CodeGenerationControl implements VPActionController {
         return documentPath;
     }
     
-    private PDM getMainPdm(List<PDM> pdms){
+    private void exportPIMasXML(String path){
+        // Export parameterized PIM (Diagram) as "project.xml" to ditectory "Generated Code"
+        //Exporting single model Not supported by open api we must export entire project
+        //https://forums.visual-paradigm.com/t/how-to-export-one-or-more-diagrams-to-a-visual-paradigm-project-using-openapi/16407/7
+
+        ApplicationManager.instance().getModelConvertionManager().exportXML(new File(path), true);
+    }
+
+    private PDM getMainPdm(ArrayList<PDM> pdms){
         ViewManager vm = ApplicationManager.instance().getViewManager();
-        ChoosePDMHandler pdmHandler = new ChoosePDMHandler(pdms, "Select the main PDM", ListSelectionModel.SINGLE_SELECTION);
+        PDMChooserDialog pdmHandler = new PDMChooserDialog(pdms, "Select the main PDM", ListSelectionModel.SINGLE_SELECTION);
         vm.showDialog(pdmHandler);
         return pdmHandler.getPdm().iterator().next();
     }
     
+    private void copyTransformations(PDM pdm, String savingPath) throws IOException {
+        
+        for (Transformation tt : pdm.getPdmTransformationTemplate()) {
+            File ttFile = new File(tt.getFileUri().replace("\\", "\\\\"));
+            Files.copy(ttFile.toPath(), new FileOutputStream(savingPath+"\\"+ttFile.getName(), true));
+        }
+    }
+
     private String createTransformationCommand(PDM pdm, String path){
-        //Or run the command when ever the files are
-        //example: "C:\Program Files\Saxonica\SaxonHE9.9N\bin\Transform" -t C:\...\project.xml C:\...\FeuilleCoreEnum.xsl
 
         String command = "cd \""+path+"\" ";
-        String SaxonicaTransformPath = "\""+UserInterfaceUtil.getFilePath("Executable", "exe", GlobalConfig.getSaxonicaPath(), "Choose Saxonica file path")+"\"";
+        String SaxonicaTransformPath = "\""+UserInterfaceUtil.getFilePath("Executable", "exe", GlobalConfig.getSaxonicaPath(), "Choose Saxonica file path", false).get(0)+"\"";
 
-        for (TransformationTemplate tt : pdm.getPdmTransformationTemplate()) {
+        for (Transformation tt : pdm.getPdmTransformationTemplate()) {
             File ttFile = new File(tt.getFileUri().replace("\\", "\\\\"));
             command += "&& "+SaxonicaTransformPath+" -t project.xml "+ttFile.getName()+" ";
         }
         return command;
-    }
-
-    private void exportPIMasXML(){
-        // Export parameterized PIM (Diagram) as "project.xml" to ditectory "Code"
-        //Not supported by open api
-        //https://forums.visual-paradigm.com/t/how-to-export-one-or-more-diagrams-to-a-visual-paradigm-project-using-openapi/16407/7
     }
 
     private void runTransformationCommand(String command, String savingPath){
@@ -146,21 +159,50 @@ public class CodeGenerationControl implements VPActionController {
             protected void done() {
                 loading.dispose();
                 //default title and icon
-                Object[] options = {"OK","Open code"};
+                Object[] options = {"OK","Open code", "Change location"};
                 int n = JOptionPane.showOptionDialog(null, 
-                    "Generating the code is done!!",
+                    "Generating the code is done!! check \n\n"
+                    +savingPath,
                     "Complete",
                     JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
                     null,
                     options,
-                    options[0]);
+                    options[0]
+                );
 
                 if(n == 1){
                     try {
                         Desktop.getDesktop().open(new File(savingPath));
                     } catch (IOException e) {
                         e.printStackTrace();
+                    }
+                }
+
+                if(n == 2) {
+                    String newCodeLocation = UserInterfaceUtil.getDirectoryPath(savingPath, "Choose the new location of the generated code");
+                    String projectName = ApplicationManager.instance().getProjectManager().getProject().getName();
+                    String DestFodler = savingPath+"\\"+projectName;
+
+                    UserInterfaceUtil.copyFolder(new File(DestFodler), new File (newCodeLocation));
+
+                    Object[] options2 = {"OK","Open code"};
+                    int n2 = JOptionPane.showOptionDialog(null, 
+                        "Copying the source code Completed...!!!",
+                        "Complete",
+                        JOptionPane.YES_NO_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options2,
+                        options2[0]
+                    );
+
+                    if(n2 == 1){
+                        try {
+                            Desktop.getDesktop().open(new File(newCodeLocation));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

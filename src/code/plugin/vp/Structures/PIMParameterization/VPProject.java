@@ -7,11 +7,11 @@ public class VPProject {
     private String Id;
     private String Name;
     private String CreatingDate;
-    private List<MarkedUmlElement> MarkedUmlElements;
+    private List<ParameterizedUmlElement> MarkedUmlElements;
 
     public VPProject() {}
 
-    public VPProject(String parId, String parName, String parCreatingDate, List<MarkedUmlElement> parUmlElements){
+    public VPProject(String parId, String parName, String parCreatingDate, List<ParameterizedUmlElement> parUmlElements){
         this.Id = parId;
         this.Name = parName;
         this.CreatingDate = parCreatingDate;
@@ -46,11 +46,11 @@ public class VPProject {
     }
 
     //Description
-    public List<MarkedUmlElement> getMarkedUmlElements() {
+    public List<ParameterizedUmlElement> getMarkedUmlElements() {
         return MarkedUmlElements;
     }
 
-    public void setMarkedUmlElements(List<MarkedUmlElement> parUmlElements) {
+    public void setMarkedUmlElements(List<ParameterizedUmlElement> parUmlElements) {
         this.MarkedUmlElements = parUmlElements;
     }
 

@@ -10,11 +10,11 @@ public class PDM {
     private String Description;
     private String CreatingDate;
     private UmlProfile UmlProfile;
-    private List<TransformationTemplate> TransformationTemplates;
+    private List<Transformation> TransformationTemplates;
 
     public PDM(){}
     
-    public PDM(UUID parId, String parName, String parDescription, String parCreatingDate, UmlProfile parUmlProfile, List<TransformationTemplate> parTransformationTemplates){
+    public PDM(UUID parId, String parName, String parDescription, String parCreatingDate, UmlProfile parUmlProfile, List<Transformation> parTransformationTemplates){
         this.Id = parId;
         this.Name = parName;
         this.Description = parDescription;
@@ -68,11 +68,11 @@ public class PDM {
     }
 
     //Transformation Template
-    public List<TransformationTemplate> getPdmTransformationTemplate() {
+    public List<Transformation> getPdmTransformationTemplate() {
         return TransformationTemplates;
     }
 
-    public void setPdmTransformationTemplate(List<TransformationTemplate> paraTransformationTemplates) {
+    public void setPdmTransformationTemplate(List<Transformation> paraTransformationTemplates) {
         this.TransformationTemplates = paraTransformationTemplates;
     }
 }

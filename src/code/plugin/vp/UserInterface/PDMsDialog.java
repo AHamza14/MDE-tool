@@ -1,4 +1,4 @@
-package code.plugin.vp.Handlers;
+package code.plugin.vp.UserInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +12,10 @@ import com.vp.plugin.*;
 import com.vp.plugin.view.*;
 
 import code.plugin.vp.Structures.*;
+// import code.plugin.vp.Utilities.TemplateGeneration;
 import code.plugin.vp.Utilities.XML;
 
-public class PDMsHandler extends JFrame implements IDialogHandler {
+public class PDMsDialog extends JFrame implements IDialogHandler {
 
     /**
      *
@@ -131,7 +132,7 @@ public class PDMsHandler extends JFrame implements IDialogHandler {
         //Add a PDM
         AddButton.addActionListener(e -> {
             ViewManager vm = ApplicationManager.instance().getViewManager();
-            PDMDetailsHandler d = new PDMDetailsHandler(PdmUUID);
+            PDMDetailsDialog d = new PDMDetailsDialog(PdmUUID);
             vm.showDialog(d);
     
             if (d.getPdm().getId() != null) {
@@ -154,7 +155,7 @@ public class PDMsHandler extends JFrame implements IDialogHandler {
             for (PDM pdm : Pdm) {
                 if (pdm.getName() == pdmName) {
                     ViewManager vm = ApplicationManager.instance().getViewManager();
-                    PDMDetailsHandler d = new PDMDetailsHandler(pdm);
+                    PDMDetailsDialog d = new PDMDetailsDialog(pdm);
                     vm.showDialog(d);
 
                     pdm.setName(d.getPdm().getName());
@@ -190,7 +191,11 @@ public class PDMsHandler extends JFrame implements IDialogHandler {
         // Save the PDMs
         SaveButton.addActionListener(e -> {
             if (PdmTable.getModel().getRowCount() > 0) {
-                XML.ExportPDMs(Pdm);
+                for (PDM pdm : Pdm) {
+                    XML.ExportPDM(pdm);
+                }
+                
+                //TemplateGeneration.CreateTransformationTemplates(Pdm);
                 JOptionPane.showMessageDialog(null, "XML File created");
             } else {
                 JOptionPane.showMessageDialog(null, "There is no PDM in the Table");
@@ -218,7 +223,6 @@ public class PDMsHandler extends JFrame implements IDialogHandler {
 
     @Override
     public void prepare(IDialog dialog) {
-
         dialog.setModal(true);
         dialog.setTitle("MDE - PDMs");
         dialog.setResizable(true);
