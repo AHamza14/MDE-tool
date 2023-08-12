@@ -1,4 +1,4 @@
-package code.plugin.vp.Handlers;
+package code.plugin.vp.UserInterface;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -15,10 +15,10 @@ import com.vp.plugin.view.*;
 
 import code.plugin.vp.Structures.Concept;
 import code.plugin.vp.Structures.DesignConcern;
-import code.plugin.vp.Utilities.Constants;
+import code.plugin.vp.Utilities.Enums;
 import code.plugin.vp.Utilities.UserInterfaceUtil;
 
-public class UmlProfileConceptHandler implements IDialogHandler {
+public class UmlProfileConceptDialog implements IDialogHandler {
 
     //Logic
     Concept UmlProfileConcept;
@@ -33,7 +33,7 @@ public class UmlProfileConceptHandler implements IDialogHandler {
     JButton CloseButton = new JButton("Close");
 
     //Design Concern
-    JTable  DesignConcernTable = new JTable(new DefaultTableModel(Constants.TableColumns, 0));;
+    JTable  DesignConcernTable = new JTable(new DefaultTableModel(Enums.TableColumns, 0));;
     JButton DesignConcernAddButton = new JButton("Add");
     JButton DesignConcernEditButton = new JButton("Edit");
     JButton DesignConcernRemoveButton = new JButton("Remove");
@@ -41,8 +41,8 @@ public class UmlProfileConceptHandler implements IDialogHandler {
     List<DesignConcern> DesignConcerns = new ArrayList<DesignConcern>();
     UUID DesignConcernUUID = UUID.randomUUID();
 
-    public UmlProfileConceptHandler(UUID paraId) {
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(Constants.UmlProfileConceptTypes);
+    public UmlProfileConceptDialog(UUID paraId) {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(Enums.UmlProfileConceptTypes);
         Type.setModel(model);
 
         getComponent();
@@ -51,10 +51,10 @@ public class UmlProfileConceptHandler implements IDialogHandler {
         UmlProfileConcept = new Concept();
     }
 
-    public UmlProfileConceptHandler(Concept concept) {
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(Constants.UmlProfileConceptTypes);
+    public UmlProfileConceptDialog(Concept concept) {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(Enums.UmlProfileConceptTypes);
         Type.setModel(model);
-        Type.setSelectedIndex(Arrays.asList(Constants.UmlProfileConceptTypes).indexOf(concept.getType()));
+        Type.setSelectedIndex(Arrays.asList(Enums.UmlProfileConceptTypes).indexOf(concept.getType()));
 
         Id.setText(String.valueOf(concept.getId()));
         Name.setText(concept.getName());
@@ -178,7 +178,7 @@ public class UmlProfileConceptHandler implements IDialogHandler {
                 }
 
                 ViewManager vm = ApplicationManager.instance().getViewManager();
-                DesignConcernHandler d = new DesignConcernHandler(DesignConcernUUID);
+                DesignConcernDialog d = new DesignConcernDialog(DesignConcernUUID);
                 vm.showDialog(d);
 
                 if(d.getDesignConcern().getId() != null){
@@ -221,7 +221,7 @@ public class UmlProfileConceptHandler implements IDialogHandler {
                     if(dd.getName() == designConcernName) {
 
                         ViewManager vm = ApplicationManager.instance().getViewManager();
-                        DesignConcernHandler d = new DesignConcernHandler(dd);
+                        DesignConcernDialog d = new DesignConcernDialog(dd);
                         vm.showDialog(d);
 
                         dd.setName(d.getDesignConcern().getName());

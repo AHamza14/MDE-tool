@@ -1,4 +1,4 @@
-package code.plugin.vp.Handlers;
+package code.plugin.vp.UserInterface;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -13,13 +13,13 @@ import javax.swing.*;
 import com.vp.plugin.view.*;
 
 import code.plugin.vp.Structures.*;
-import code.plugin.vp.Utilities.Constants;
+import code.plugin.vp.Utilities.Enums;
 import code.plugin.vp.Utilities.UserInterfaceUtil;
 
-public class TransformationTemplateHandler implements IDialogHandler {
+public class TransformationDialog implements IDialogHandler {
 
     //Logic
-    TransformationTemplate TransTemplate;
+    Transformation TransTemplate;
     List<Concept> Concepts;
 
     //Components
@@ -35,10 +35,10 @@ public class TransformationTemplateHandler implements IDialogHandler {
     JButton CancelButton = new JButton("Cancel");
     JButton CloseButton = new JButton("Close");
 
-    public TransformationTemplateHandler(UUID paraId, List<Concept> concepts) {
+    public TransformationDialog(UUID paraId, List<Concept> concepts) {
         Concepts = concepts;
 
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(Constants.TransformationTemmplateTypes);
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(Enums.TransformationTypes);
         Type.setModel(model);
 
         DefaultListModel<String> conceptsForVariationModel = new DefaultListModel<String>();
@@ -57,15 +57,15 @@ public class TransformationTemplateHandler implements IDialogHandler {
         getComponent();
 
         Id.setText(String.valueOf(paraId));
-        TransTemplate = new TransformationTemplate();
+        TransTemplate = new Transformation();
     }
 
-    public TransformationTemplateHandler(TransformationTemplate tt, List<Concept> concepts) {
+    public TransformationDialog(Transformation tt, List<Concept> concepts) {
         Concepts = concepts;
 
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(Constants.TransformationTemmplateTypes);
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(Enums.TransformationTypes);
         Type.setModel(model);
-        Type.setSelectedIndex(Arrays.asList(Constants.TransformationTemmplateTypes).indexOf(tt.getType()));
+        Type.setSelectedIndex(Arrays.asList(Enums.TransformationTypes).indexOf(tt.getType()));
 
         Id.setText(String.valueOf(tt.getId()));
         Name.setText(tt.getName());
@@ -249,8 +249,8 @@ public class TransformationTemplateHandler implements IDialogHandler {
         // Choose File Button
         ChooseFile.addActionListener((ActionListener) new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String filePath =  UserInterfaceUtil.getFilePath("XSL Format", "XSL", null,"Choose transformation template");
-                File.setText(filePath == null?"":filePath.replace("\\\\", "\\"));
+                ArrayList<String> filePaths =  UserInterfaceUtil.getFilePath("XSL Format", "XSL", null,"Choose transformation template", false);
+                File.setText(filePaths.get(0) == null?"":filePaths.get(0).replace("\\\\", "\\"));
             }
         });
     }
@@ -260,7 +260,7 @@ public class TransformationTemplateHandler implements IDialogHandler {
         return true;
     }
 
-    public TransformationTemplate getTransformationTemplate(){
+    public Transformation getTransformationTemplate(){
         return TransTemplate;
     }
 

@@ -27,3 +27,9 @@ hs_err_pid*
 
 # Word temporary
 ~$*.doc*
+
+# Test files and folders
+Documentation/Tests/
+
+TemplateGeneration.java
+Guide.docx

@@ -3,7 +3,7 @@ package code.plugin.vp;
 import com.vp.plugin.*;
 import code.plugin.vp.Utilities.UserInterfaceUtil;
 
-public class MainCodeGeneration implements VPPlugin {
+public class MainMDE implements VPPlugin {
 
 	@Override
 	public void loaded(VPPluginInfo vpi) {

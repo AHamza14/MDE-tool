@@ -1,4 +1,4 @@
-package code.plugin.vp.Handlers;
+package code.plugin.vp.UserInterface;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -19,13 +19,13 @@ import com.vp.plugin.view.*;
 import code.plugin.vp.Structures.Concept;
 import code.plugin.vp.Structures.Constraint;
 import code.plugin.vp.Structures.PDM;
-import code.plugin.vp.Structures.TransformationTemplate;
+import code.plugin.vp.Structures.Transformation;
 import code.plugin.vp.Structures.UmlProfile;
-import code.plugin.vp.Utilities.Constants;
+import code.plugin.vp.Utilities.Enums;
 import code.plugin.vp.Utilities.UserInterfaceUtil;
 
 
-public class PDMDetailsHandler implements IDialogHandler {
+public class PDMDetailsDialog implements IDialogHandler {
     
     //Main Panel
     JTextField PDMId = new JTextField();
@@ -44,7 +44,7 @@ public class PDMDetailsHandler implements IDialogHandler {
     JButton UmlProfileConceptAddButton = new JButton("Add");
     JButton UmlProfileConceptRemoveButton = new JButton("Remove");
     JButton UmlProfileConceptEditButton = new JButton("Edit");
-    JTable UmlProfileConceptTable = new JTable(new DefaultTableModel(Constants.TableColumns, 0));
+    JTable UmlProfileConceptTable = new JTable(new DefaultTableModel(Enums.TableColumns, 0));
 
     List<Concept> Concepts = new ArrayList<Concept>();
     UUID ConceptUUID = UUID.randomUUID();
@@ -53,7 +53,7 @@ public class PDMDetailsHandler implements IDialogHandler {
     JButton UmlProfileConstraintAddButton = new JButton("Add");
     JButton UmlProfileConstraintRemoveButton = new JButton("Remove");
     JButton UmlProfileConstraintEditButton = new JButton("Edit");
-    JTable UmlProfileConstraintTable = new JTable(new DefaultTableModel(Constants.TableColumns, 0));
+    JTable UmlProfileConstraintTable = new JTable(new DefaultTableModel(Enums.TableColumns, 0));
 
     List<Constraint> Constraints = new ArrayList<Constraint>();
     UUID ConstraintUUID = UUID.randomUUID();
@@ -62,13 +62,13 @@ public class PDMDetailsHandler implements IDialogHandler {
     JButton TransTemplateAddButton = new JButton("Add");
     JButton TransTemplateRemoveButton = new JButton("Remove");
     JButton TransTemplateEditButton = new JButton("Edit");
-    JTable TransTemplateTable = new JTable(new DefaultTableModel(Constants.TableColumns, 0));
+    JTable TransTemplateTable = new JTable(new DefaultTableModel(Enums.TableColumns, 0));
 
-    List<TransformationTemplate> TransTemplates = new ArrayList<TransformationTemplate>();
+    List<Transformation> TransTemplates = new ArrayList<Transformation>();
     UUID TTUUID = UUID.randomUUID();
     
     //Constructors
-    public PDMDetailsHandler(UUID paraId) {
+    public PDMDetailsDialog(UUID paraId) {
 
         getComponent();
 
@@ -76,7 +76,7 @@ public class PDMDetailsHandler implements IDialogHandler {
         Pdm = new PDM();
     }
 
-    public PDMDetailsHandler(PDM pdm) {
+    public PDMDetailsDialog(PDM pdm) {
 
         PDMId.setText(String.valueOf(pdm.getId()));
         PDMName.setText(pdm.getName());
@@ -101,7 +101,7 @@ public class PDMDetailsHandler implements IDialogHandler {
         //Transformation Templates
         TransTemplates = pdm.getPdmTransformationTemplate();
         TransTemplateTable.getColumnModel().getColumn(0).setMaxWidth(80);
-        for(TransformationTemplate tt: TransTemplates){
+        for(Transformation tt: TransTemplates){
             DefaultTableModel tableModel = (DefaultTableModel) TransTemplateTable.getModel();
             tableModel.addRow(new Object[]{tt.getId(), tt.getName()});
         }
@@ -294,7 +294,7 @@ public class PDMDetailsHandler implements IDialogHandler {
             public void actionPerformed(ActionEvent e) {
 
                 ViewManager vm = ApplicationManager.instance().getViewManager();
-                UmlProfileConceptHandler d = new UmlProfileConceptHandler(ConceptUUID);
+                UmlProfileConceptDialog d = new UmlProfileConceptDialog(ConceptUUID);
                 vm.showDialog(d);
 
                 if(d.getConcept().getId() != null){
@@ -337,7 +337,7 @@ public class PDMDetailsHandler implements IDialogHandler {
                     if(concept.getName() == conceptName) {
 
                         ViewManager vm = ApplicationManager.instance().getViewManager();
-                        UmlProfileConceptHandler d = new UmlProfileConceptHandler(concept);
+                        UmlProfileConceptDialog d = new UmlProfileConceptDialog(concept);
                         vm.showDialog(d);
 
                         concept.setName(d.getConcept().getName());
@@ -358,7 +358,7 @@ public class PDMDetailsHandler implements IDialogHandler {
             public void actionPerformed(ActionEvent e) {
 
                 ViewManager vm = ApplicationManager.instance().getViewManager();
-                UmlProfileConstraintHandler d = new UmlProfileConstraintHandler(ConstraintUUID,Concepts);
+                UmlProfileConstraintDialog d = new UmlProfileConstraintDialog(ConstraintUUID,Concepts);
                 vm.showDialog(d);
 
                 if(d.getUmlProfileConstraint().getId() != null){
@@ -383,7 +383,7 @@ public class PDMDetailsHandler implements IDialogHandler {
                     if(constraint.getName() == constraintName) {
 
                         ViewManager vm = ApplicationManager.instance().getViewManager();
-                        UmlProfileConstraintHandler d = new UmlProfileConstraintHandler(constraint, Concepts);
+                        UmlProfileConstraintDialog d = new UmlProfileConstraintDialog(constraint, Concepts);
                         vm.showDialog(d);
 
                         constraint.setName(d.getUmlProfileConstraint().getName());
@@ -422,7 +422,7 @@ public class PDMDetailsHandler implements IDialogHandler {
         TransTemplateAddButton.addActionListener((ActionListener) new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ViewManager vm = ApplicationManager.instance().getViewManager();
-                TransformationTemplateHandler d = new TransformationTemplateHandler(TTUUID, Concepts);
+                TransformationDialog d = new TransformationDialog(TTUUID, Concepts);
                 vm.showDialog(d);
 
                 if(d.getTransformationTemplate().getId() != null){
@@ -442,7 +442,7 @@ public class PDMDetailsHandler implements IDialogHandler {
                 int selectedRow = TransTemplateTable.getSelectedRow();
 
                 String ttName = (String) TransTemplateTable.getModel().getValueAt(selectedRow, column);
-                for(TransformationTemplate tt : TransTemplates) {
+                for(Transformation tt : TransTemplates) {
                     if(tt.getName() == ttName) {
                         TransTemplates.remove(tt);
                         break;
@@ -461,11 +461,11 @@ public class PDMDetailsHandler implements IDialogHandler {
                 int selectedRow = TransTemplateTable.getSelectedRow();
 
                 String ttName = (String) TransTemplateTable.getModel().getValueAt(selectedRow, column);
-                for(TransformationTemplate tt : TransTemplates) {
+                for(Transformation tt : TransTemplates) {
                     if(tt.getName() == ttName) {
 
                         ViewManager vm = ApplicationManager.instance().getViewManager();
-                        TransformationTemplateHandler d = new TransformationTemplateHandler(tt, Concepts);
+                        TransformationDialog d = new TransformationDialog(tt, Concepts);
                         vm.showDialog(d);
 
                         tt.setName(d.getTransformationTemplate().getName());

@@ -1,19 +1,19 @@
-package code.plugin.vp.Controls;
+package code.plugin.vp.Controllers;
 
 import com.vp.plugin.ApplicationManager;
 import com.vp.plugin.ViewManager;
 import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPActionController;
 
-import code.plugin.vp.Handlers.PDMsHandler;
+import code.plugin.vp.UserInterface.PDMsDialog;
 
 
-public class PDMControl implements VPActionController {
+public class PDMController implements VPActionController {
 
    @Override
    public void performAction(VPAction action) {
       ViewManager vm =  ApplicationManager.instance().getViewManager();
-		PDMsHandler d = new PDMsHandler();
+		PDMsDialog d = new PDMsDialog();
       vm.showDialog(d);
    }
    
