@@ -29,6 +29,6 @@ hs_err_pid*
 ~$*.doc*
 
 # Test files and folders
-Documentation/Tests/
 
 TemplateGeneration.java
+bin
