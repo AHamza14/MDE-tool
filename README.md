@@ -2,10 +2,11 @@
 MDE tool is a plugin for visual paradigm developed to assist the user with to implementing our Model Driven Engineering approach ....
 
 # Test
-To test the plugin in Visual Paradigm:
-    1. Download and install Visual Paradigm.
-    2. Copy the "Code Generation" from the "MDEPlugin" folder into the "plugins" directory of Visual Paradigm. example:
-    "C:/Users/<user_name>/AppData/Roaming/VisualParadigm/plugins".
-    3. Reload Visual Paradigm
+To conduct plugin testing within Visual Paradigm, proceed as follows:
 
-For more informations on how to use the tool check the "Guide.docx" file in the documentation.
+1. Download and install Visual Paradigm.
+2. Copy the "Code Generation" folder from the "MDEPlugin" directory and paste it into the "plugins" folder of Visual Paradigm. For instance, the path looks like:
+"C:/Users/<user_name>/AppData/Roaming/VisualParadigm/plugins".
+3. Reload Visual Paradigm.
+
+For further details on how to use the tool, please consult the "Guide.docx" document in the documentation.
