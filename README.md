@@ -9,4 +9,4 @@ To conduct plugin testing within Visual Paradigm, proceed as follows:
 "C:/Users/<user_name>/AppData/Roaming/VisualParadigm/plugins".
 3. Reload Visual Paradigm.
 
-For further details on how to use the tool, please consult the "Guide.docx" document in the documentation.
+For further details on how to use the tool, please consult the "User Guide.docx" document in the documentation.
