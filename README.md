@@ -1,5 +1,5 @@
 # Introduction
-MDE tool is a plugin for visual paradigm developed to assist the user with to implementing our Model Driven Engineering approach ....
+MDE tool is a Visual Paradigm plugin designed to support users in implementing our Model Driven Engineering approach. It consists of three key components: architecture specification, PIM parameterization, and code generation.
 
 # Test
 To conduct plugin testing within Visual Paradigm, proceed as follows:
