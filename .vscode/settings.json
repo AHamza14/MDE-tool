@@ -1,8 +1,0 @@
-{
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "c:\\Program Files\\Visual Paradigm 16.3\\lib\\openapi.jar",
-        "c:\\Users\\Hamza\\Desktop\\saxon-he-11.4.jar"
-    ],
-    "editor.inlayHints.enabled": "off"
-}
